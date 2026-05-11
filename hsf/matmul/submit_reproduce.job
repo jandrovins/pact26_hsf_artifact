@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for HSF Matmul
+# Arguments: <binary> <N> <M> <ITS> <TS>
+# =============================================================================
+
+bin=$1
+N=$2
+M=$3
+ITS=$4
+TS=$5
+WARMUP=1
+params="$N $M $ITS $TS $WARMUP"
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/hsf"
+BENCH_DIR="$BASE_ROOT/matmul"
+
+export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"
+
+echo "=== Matmul HSF: N=$N M=$M TS=$TS ITS=$ITS ==="
+echo "VVV_TG_ENABLED=$VVV_TG_ENABLED VVV_LOWER_LVL=$VVV_LOWER_LVL VVV_UPPER_LVL=$VVV_UPPER_LVL"
+
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    cd '$BENCH_DIR'
+    mkdir -p build
+    if [ ! -f '$bin' ]; then
+        echo 'Building...'
+        make
+    fi
+    ulimit -c unlimited
+    srun -v --hint=nomultithread \
+        --exclusive \
+        --cpu-bind=verbose,none \
+        -N \$SLURM_JOB_NUM_NODES \
+        --ntasks-per-node=1 \
+        --cpus-per-task=\$SRUN_CPUS_PER_TASK \
+        '$BENCH_DIR/$bin' $params
+"
