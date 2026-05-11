@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for HSF Cholesky
+# Arguments: <binary> <nsize> <ts>
+# =============================================================================
+
+bin=$1
+nsize=$2
+ts=$3
+params="$nsize $ts 1"
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/hsf"
+BENCH_DIR="$BASE_ROOT/cholesky"
+
+export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"
+
+echo "=== Cholesky HSF: N=$nsize TS=$ts ==="
+echo "VVV_TG_ENABLED=$VVV_TG_ENABLED"
+echo "VVV_LOWER_LVL=$VVV_LOWER_LVL"
+echo "VVV_UPPER_LVL=$VVV_UPPER_LVL"
+echo "VVV_AFF_FLEXIBLE=$VVV_AFF_FLEXIBLE"
+echo "NOSV_CONFIG_OVERRIDE=$NOSV_CONFIG_OVERRIDE"
+
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    cd '$BENCH_DIR'
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin...'
+        make '$bin'
+    fi
+    ulimit -c unlimited
+    srun -v --hint=nomultithread \
+        --exclusive \
+        --cpu-bind=verbose,none \
+        -N \$SLURM_JOB_NUM_NODES \
+        --ntasks-per-node=1 \
+        --cpus-per-task=\$SRUN_CPUS_PER_TASK \
+        ./$bin $params
+"
