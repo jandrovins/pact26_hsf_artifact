@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for nosvorig Multisaxpy
+# Arguments: <binary> <N> <TS> <iterations>
+# =============================================================================
+
+bin=$1
+N=$2
+TS=$3
+iterations=$4
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/nosvorig"
+BENCH_DIR="$BASE_ROOT/multisaxpy"
+
+export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"
+
+echo "=== Multisaxpy nosvorig: N=$N TS=$TS its=$iterations ==="
+
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    cd '$BENCH_DIR'
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin...'
+        make '$bin'
+    fi
+    ulimit -c unlimited
+    srun -v --hint=nomultithread \
+        --exclusive \
+        --cpu-bind=verbose \
+        -N \$SLURM_JOB_NUM_NODES \
+        --ntasks-per-node=1 \
+        --cpus-per-task=\$SRUN_CPUS_PER_TASK \
+        '$BENCH_DIR/$bin' $N $TS $iterations
+"
