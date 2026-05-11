@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for nosvorig Heat
+# Arguments: <binary> <N> <BS> <ITS> <WARMUP> <CPUS>
+# =============================================================================
+
+bin=$1
+N=$2
+BS=$3
+ITS=$4
+WARMUP=$5
+CPUS=$6
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/nosvorig"
+BENCH_DIR="$BASE_ROOT/heat"
+
+WARMUP_FLAG=""
+if [ "$WARMUP" = "0" ]; then
+    WARMUP_FLAG="-W"
+fi
+
+export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"
+
+echo "=== Heat nosvorig: N=$N BS=$BS ITS=$ITS ==="
+
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    cd '$BENCH_DIR'
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin...'
+        make '$bin'
+    fi
+    ulimit -c unlimited
+    srun -v --hint=nomultithread \
+        --exclusive \
+        --cpu-bind=verbose \
+        -N \$SLURM_JOB_NUM_NODES \
+        --ntasks-per-node=1 \
+        --cpus-per-task=$CPUS \
+        '$BENCH_DIR/$bin' -r $N -c $N -t $ITS -b $BS $WARMUP_FLAG
+"
