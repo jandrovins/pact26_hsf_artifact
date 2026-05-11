@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for nosvorig HPCCG
+# Arguments: <binary> <nx> <ny> <nz> <max_iter> <ntasks>
+# =============================================================================
+
+bin=$1
+nx=$2
+ny=$3
+nz=$4
+max_iter=$5
+ntasks=$6
+params="$nx $ny $nz $max_iter $ntasks"
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/nosvorig"
+BENCH_DIR="$BASE_ROOT/hpccg"
+
+export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none,scheduler.immediate_successor=true"
+
+echo "=== HPCCG nosvorig: nx=$nx ny=$ny nz=$nz ntasks=$ntasks ==="
+
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    cd '$BENCH_DIR'
+    mkdir -p obj
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin...'
+        make '$bin'
+    fi
+    ulimit -c unlimited
+    srun -v --hint=nomultithread \
+        --exclusive \
+        --cpu-bind=verbose \
+        -N \$SLURM_JOB_NUM_NODES \
+        --ntasks-per-node=1 \
+        --cpus-per-task=\$SRUN_CPUS_PER_TASK \
+        '$BENCH_DIR/$bin' t1 $params
+"
