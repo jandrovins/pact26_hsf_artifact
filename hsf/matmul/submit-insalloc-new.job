@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# ============================================================================
+# Matmul submit job — 2D Superblock Taskgroup Experiments
+# ============================================================================
+# Called by launcher_new.sh via sbatch.
+# Arguments: <binary> <N> <M> <TS> <TIMESTEPS> <WARMUP> <imm> [ovni]
+#
+# Binary usage: ./<binary> N M TIMESTEPS TILESIZE WARMUP
+# ============================================================================
+
+echo "Starting in pwd $(pwd)"
+
+# Choose base paths depending on whether we're on an 'owl' host (local paths)
+HOSTNAME=$(hostname)
+BASE_ROOT="/nfs/home/Computational/varcila/ics_amdblis"
+if echo "$HOSTNAME" | grep -q "owl"; then
+	BASE_ROOT="/home/Computational/varcila/ics_amdblis"
+fi
+
+cd "$BASE_ROOT"
+nix develop --impure
+cd "$BASE_ROOT/matmul-mpi-oss-dif-n-m"
+mkdir -p out
+
+make -B
+
+bin=$1
+nsize=$2
+msize=$3
+ts=$4
+timesteps=$5
+warmup=$6
+imm=$7
+ovni=${8:-none}
+
+# Binary expects: N M TIMESTEPS TILESIZE WARMUP
+params="$nsize $msize $timesteps $ts $warmup"
+
+timestamp=$(date +%s)
+export OVNI_TRACEDIR=ovni_${VVV_EXP_STR}_$timestamp
+
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},instrumentation.version=$ovni
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},scheduler.immediate_successor=$imm
+# Respect NOSV_CONFIG propagated from the launcher; default to nosv.toml if unset
+export NOSV_CONFIG=${NOSV_CONFIG:-nosv.toml}
+
+# Use local nOS-V build with HWC support when papi backend is enabled
+NOSV_LOCAL_LIB="${BASE_ROOT}/nos-v-haffsched/_buildtmp_20260220T222025/.libs"
+if echo "$NOSV_CONFIG_OVERRIDE" | grep -q "hwcounters.backend=papi"; then
+	export LD_PRELOAD="${NOSV_LOCAL_LIB}/libnosv.so.0.0.0"
+	echo "Using LOCAL nOS-V with HWC support: $LD_PRELOAD"
+	hwc_outfile="hwc_${VVV_EXP_STR}_${SLURM_ARRAY_TASK_ID:-0}.csv"
+	export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},hwcounters.output_file=${hwc_outfile}"
+	export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},hwcounters.task_filter=all"
+fi
+
+echo "VVV_TG_ENABLED=$VVV_TG_ENABLED"
+echo "VVV_MATMUL_TG_HIERARCHY=${VVV_MATMUL_TG_HIERARCHY:-0}"
+echo "VVV_LOWER_LVL=$VVV_LOWER_LVL"
+echo "VVV_UPPER_LVL=$VVV_UPPER_LVL"
+echo "VVV_AFF_FLEXIBLE=$VVV_AFF_FLEXIBLE"
+
+ulimit -c unlimited
+echo "ppn=$SLURM_NTASKS_PER_NODE nprocs=$SLURM_NPROCS cpus_per_task=$SRUN_CPUS_PER_TASK"
+echo "params=$params"
+set -x
+
+srun -v --hint=nomultithread \
+	--exclusive \
+	--cpu-bind=verbose \
+	-N $SLURM_JOB_NUM_NODES \
+	--ntasks-per-node=$SLURM_NTASKS_PER_NODE \
+	--cpus-per-task=$SRUN_CPUS_PER_TASK \
+	./${bin} $params
+
+end_timestamp=$(date +%s)
+elapsed=$((end_timestamp - timestamp))
+echo "Elapsed time: ${elapsed} seconds"
+
+if [ "$ovni" == "ovni" ]; then
+	ovniemu -b $OVNI_TRACEDIR
+fi

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -x
+echo Starting in pwd `pwd`
+
+cd /nfs/home/Computational/varcila/ics_nosvorig
+nix develop --impure
+cd /nfs/home/Computational/varcila/ics_nosvorig/matmul-mpi-oss-n-dif-m
+mkdir -p out
+
+bin=$1
+nsize=$2
+msize=$3
+its=$4
+ts=$5
+imm=$6
+ovni=${7:-none}
+
+# one matmul warmup
+params="$nsize $msize $its $ts 1"
+
+timestamp=$(date +%s)
+export OVNI_TRACEDIR=ovni_${VVV_EXP_STR}_$timestamp
+
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},instrumentation.version=$ovni
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},scheduler.immediate_successor=$imm
+export NOSV_CONFIG=nosv.toml
+
+ulimit -c unlimited
+echo ppn=$SLURM_NTASKS_PER_NODE nprocs=$SLURM_NPROCS cpus_per_task=$SRUN_CPUS_PER_TASK
+
+ls
+pwd
+hostname
+echo OUT: $SRUN_OUTPUT
+echo ERR: $SRUN_ERROR
+
+srun -v --hint=nomultithread \
+	--exclusive \
+	--cpu-bind=v \
+	--ntasks-per-node=$SLURM_NTASKS_PER_NODE \
+	--cpus-per-task=$SRUN_CPUS_PER_TASK \
+	./${bin} $params
+	#./perf_mem_run.sh ./${bin} t1 $params
+
+end_timestamp=$(date +%s)
+elapsed=$((end_timestamp - timestamp))
+echo "Elapsed time: ${elapsed} seconds"
+
+if [ "$ovni" == "ovni" ]; then
+	ovniemu $OVNI_TRACEDIR
+fi

@@ -1,0 +1,74 @@
+{
+  "nodes": {
+    "jungle": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1769612627,
+        "narHash": "sha256-GgEsBsLTSWWhnBHxUQxskRCobJzX12LaGjWwItr/p5Y=",
+        "ref": "tglib",
+        "rev": "bb3e589d3458fe1983e8284af882af786572de15",
+        "revCount": 1535,
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/jungle.git"
+      },
+      "original": {
+        "ref": "tglib",
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/jungle.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1767634882,
+        "narHash": "sha256-2GffSfQxe3sedHzK+sTKlYo/NTIAGzbFCIsNMUPAAnk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3c9db02515ef1d9b6b709fc60ba9a540957f661c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nodes_src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761658241,
+        "narHash": "sha256-pnkHRCiXLJRJ8YYqj1MbhwOhWMiDrWqiO2UT/hDxTF4=",
+        "type": "tarball",
+        "url": "https://github.com/bsc-pm/nodes/releases/download/version-1.4/nodes-1.4.0.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/bsc-pm/nodes/releases/download/version-1.4/nodes-1.4.0.tar.gz"
+      }
+    },
+    "nosv_src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761645143,
+        "narHash": "sha256-yLdZx6c0IOfXa76ZoZ3TdkPGq/vCnfiNf+2zmkhL4Os=",
+        "type": "tarball",
+        "url": "https://github.com/bsc-pm/nos-v/releases/download/4.0.0/nos-v-4.0.0.tar.bz2"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/bsc-pm/nos-v/releases/download/4.0.0/nos-v-4.0.0.tar.bz2"
+      }
+    },
+    "root": {
+      "inputs": {
+        "jungle": "jungle",
+        "nodes_src": "nodes_src",
+        "nosv_src": "nosv_src"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

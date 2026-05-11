@@ -1,0 +1,174 @@
+# This file is part of nOS-V and is licensed under the terms contained in the COPYING file
+#
+# Copyright (C) 2021-2025 Barcelona Supercomputing Center (BSC)
+
+# Default nOS-V configuration file.
+# Note that every process in the same nOS-V instance should load an identical configuration file,
+# otherwise, the behaviour is unspecified
+
+# Miscellaneous configurations
+[misc]
+	# Default stack size when creating worker threads
+	stack_size = "8M"
+
+# Shared memory configuration
+[shared_memory]
+	# Name of the shared memory section. This variable acts as an "id" for each nOS-V instance
+	# Two applications with the same shared memory name will share a nOS-V instance, while different names
+	# will result in independent nOS-V instances. Note that both the name of the shared memory as well as the
+	# isolation level have to match for nOS-V instances to connect
+	name = "nosv"
+	# Isolation level of nOS-V. Possible values are:
+	# "process" - Each process has a separate nOS-V instance
+	# "user" - nOS-V instances are shared for the same user
+	# "group" - nOS-V instances are shared for the same group
+	# "public" - nOS-V instances are shared for the whole system
+	isolation_level = "process"
+	# Size of the shared memory section. Choose powers of two
+	size = "32G"
+	# Start of the shared memory mapping
+	# This option should be memory address codified in hexadecimal (start with 0x)
+	start = 0x0000200000000000
+
+# Scheduler configuration
+# These parameters allow to fine tune the scheduler's behaviour
+[scheduler]
+	# Number of logical CPUs mapped to a single scheduler SPSC for ready tasks
+	# Minimum is 1, there is no maximum. Try to choose numbers that divide evenly the number
+	# of CPUs in the system.
+	# A lower number will yield more scheduling throughput and is adequate when using
+	# multiple task creator processes.
+	# A higher number will yield lower scheduling latency and is adequate when using one or few
+	# task creator processes
+	cpus_per_queue = 1
+	# Number of tasks that are grabbed off of a queue when processing ready tasks.
+	# Lowering the number may be better if there are very few ready tasks during execution.
+	# Increasing the batch may help if your CPU has bad single-thread performance.
+	# In general, the default value of 64 should result in a good trade-off
+	queue_batch = 64
+	# Scheduler quantum in ns. This is a guideline for how long should we execute one process' tasks
+	# until we have to switch to the next one. However, as nOS-V tasks are not preemptable, it isn't enforced.
+	# This parameter is specially relevant for the nosv_schedpoint function, which will try to schedule
+	# each quantum ns.
+	# A lower value will cause more inter-process context switches but may provide more uniform progress,
+	# while a higher value will minimize context switches but may stall applications for longer
+	quantum_ns = 20000000 # nanoseconds
+	# Size of the queues that are used to place tasks into the scheduler
+	# A good value should be a multiple of queue_batch
+	in_queue_size = 256
+	# Enable the immediate successor policy, which controls wether nOS-V honors the NOSV_SUBMIT_IMMEDIATE
+	# to execute a task immediately after the current one
+	immediate_successor = true
+
+# CPU Governor configuration
+# Controls the policy that nOS-V follows to block idle CPUs to save energy and resources
+[governor]
+	# There is a choice between three different governor policies:
+	# - hybrid: CPUs will spin for governor.spins before going to sleep when no work is available
+	# - idle: CPUs will sleep immediately when no work is available
+	# - busy: CPUs will never sleep
+	# In general, use idle when targeting minimum power usage, and busy when targeting maximum performance
+	# The default is hybrid as it provides a good balance between power and performance.
+	policy = "hybrid"
+	# Number of times a CPU will spin without sleeping in the "hybrid" policy.
+	# When "idle" or "busy" are selected, this setting is ignored
+	spins = 10000
+
+# Topology config
+[topology]
+	# CPU binding for the execution. The valid values are:
+	#   - "inherit": which inherits the cpu mask of the first process that initializes the runtime.
+	#   - "all" for every cpu in the system.
+	#   - "inherit-cores" which inherits the cpu mask of the first process that initializes the runtime, but only
+	#     enables the physical cores.
+	#   - "all-cores" for enabling every physical core in the system (ignoring SMT).
+	#   - taskset-like list expression (for example, "0-7,10-11,15-23:2")
+	binding = "inherit"
+	# It is also possible to define the composition of the NUMA Nodes, which will override the autodiscovered
+	# composition that nOS-V can do through libnuma.
+	# It should be deffined as an array of strings, each being a cpu list. Use the system ids for the cpus.
+        # Consider the following example in a system with 2 NUMA Nodes, each one with 8 cores:
+	# numa_nodes = ["0-3,8-11", "4-7,12-15"]
+	# Complex sets are disjoint sets of cores.
+	# complex_sets = ["0,1", "2,3", "4,5", "6,7"]
+	# Set to true if you want to print the topology at nOS-V initialization. Useful to check the computing
+	# resources available to nOS-V.
+	print = false
+
+# Task affinity config
+[task_affinity]
+	# Default affinity for all created tasks. This will be the default value for nosv task affinity in the
+	# current process. This setting is normally used in conjunction with "binding" and makes it possible to
+	# easily combine multiple processes in the same nOS-V instance.
+	# Values can be: "all" or "cpu-X", "numa-X", "complex-X" where "X" is the physical index of the resource.
+	# For example, "numa-1" will set affinity of all tasks to the NUMA Node 1.
+	default = "all"
+	# Default affinity policy, either "strict" or "preferred". When the default affinity is "all", this value
+	# is not used.
+	default_policy = "strict"
+
+# Thread affinity config
+[thread_affinity]
+	# Enable affinity compatibility support. An attached thread affinity is changed by nosv. Enabling this
+	# option makes standard {sched,pthread}_{get,set}affinity calls return the affinity the thread had before
+	# attach, as if it was not attached. This is useful for libraries that read the thread affinity to setup
+	# startup resources, such as OpenMP or MPI threads.
+	compat_support = true
+
+# Debug options
+[debug]
+	# Dump all the configuration options nOS-V is running with, its final parsed values and the
+	# path of the config file being used
+	dump_config = true
+	# Print explicitely the used cpu binding
+	print_binding = true
+
+# Hardware Counters configuration
+[hwcounters]
+	# Whether to print verbose information if a backend is enabled
+	verbose = false
+	# The enabled HWCounter backends. Possible options: "papi", "none"
+	backend = "none"
+	# The list of PAPI counters to read. By default only "PAPI_TOT_INS" and "PAPI_TOT_CYC"
+	papi_events = [
+		"PAPI_TOT_INS",
+		"PAPI_TOT_CYC"
+	]
+
+# Enabling turbo will cause nOS-V to set architecture-specific optimization flags on every created
+# or attached threads. In x86, this will cause the FTZ and DAZ flags of the SSE FPU to be enabled,
+# causing a significant performance increase in floating-point applications, but disabling IEEE-754
+# compatibility.
+[turbo]
+	enabled = true
+
+# Monitoring cappabilities and configuration.
+[monitoring]
+	enabled = false
+	# Whether to print verbose information if monitoring is enabled
+	verbose = false
+
+# Instrumentation. Only applies if nOS-V was configured with --with-ovni
+[instrumentation]
+	# Select the instrumentation to be used. Current options are "none" or "ovni".
+	version = "none"
+
+# Configuration specific to the ovni instrumentation
+[ovni]
+	# Instrumentation levels [0-5] regulate the amount of events that are emitted into an ovni trace.
+	# Higher levels emit more events, giving more information but incurring larger runtime overheads
+	# and occupying more space in the final trace.
+	level = 3
+	# It is also possible to select a more fine-grained list of event groups, for advanced users who
+	# want to disable some events selectively.
+	# This list is parsed in order starting from an empty list, the keyword "all" denotes all event types
+	# and the token "!" disables event types.
+	# Thus, a list of ["all", "!task" ] enables everything and then disables only task-related events.
+	# Note that with this option uncommented the instrumentation level will be ignored
+	## events = ["basic", "worker", "scheduler", "scheduler_submit", "scheduler_hungry", "scheduler_nonblock", "memory", "api_attach",
+	##           "api_create", "api_destroy", "api_submit", "api_pause", "api_yield", "api_waitfor", "api_schedpoint",
+	##           "api_mutex_lock", "api_mutex_trylock", "api_mutex_unlock", "api_barrier_wait", "api_cond_wait",
+	##           "api_cond_signal", "api_cond_broadcast", "task", "kernel", "breakdown" ]
+	#
+	# Size in bytes of the ring buffer for kernel events (per thread)
+	kernel_ringsize = "4M"

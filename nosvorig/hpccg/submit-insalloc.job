@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+cd /nfs/home/Computational/varcila/ics_nosvorig
+nix develop --impure
+cd /nfs/home/Computational/varcila/ics_nosvorig/hpccg2
+mkdir -p out
+
+bin=$1
+ntasks=$2
+imm=$3
+ovni=${4:-none}
+nx=${5:-384}
+ny=${6:-384}
+nz=${7:-192}
+iterations=${8:-40}
+
+params="$nx $ny $nz $iterations $ntasks"
+
+timestamp=$(date +%s)
+export OVNI_TRACEDIR=ovni_${VVV_EXP_STR}_$timestamp
+
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},instrumentation.version=$ovni
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},scheduler.immediate_successor=$imm
+export NOSV_CONFIG=nosv.toml
+
+ulimit -c unlimited
+echo ppn=$SLURM_NTASKS_PER_NODE nprocs=$SLURM_NPROCS cpus_per_task=$SRUN_CPUS_PER_TASK
+set -x
+srun -v --hint=nomultithread \
+	--exclusive \
+	--cpu-bind=v \
+	--ntasks-per-node=$SLURM_NTASKS_PER_NODE \
+	--cpus-per-task=$SRUN_CPUS_PER_TASK \
+	./${bin} t1 $params
+	#./perf_mem_run.sh ./${bin} t1 $params
+
+
+if [ "$ovni" == "ovni" ]; then
+	ovniemu $OVNI_TRACEDIR
+fi

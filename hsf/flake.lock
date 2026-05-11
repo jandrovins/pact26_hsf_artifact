@@ -1,0 +1,82 @@
+{
+  "nodes": {
+    "jungle": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1769612627,
+        "narHash": "sha256-GgEsBsLTSWWhnBHxUQxskRCobJzX12LaGjWwItr/p5Y=",
+        "ref": "tglib",
+        "rev": "bb3e589d3458fe1983e8284af882af786572de15",
+        "revCount": 1535,
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/jungle.git"
+      },
+      "original": {
+        "ref": "tglib",
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/jungle.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1767634882,
+        "narHash": "sha256-2GffSfQxe3sedHzK+sTKlYo/NTIAGzbFCIsNMUPAAnk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3c9db02515ef1d9b6b709fc60ba9a540957f661c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nodes_src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1756993753,
+        "narHash": "sha256-KexZ3ECnGrHGdKwkxtbG8vy+PutFdUV8C/3KRsq1HiM=",
+        "ref": "refs/heads/haffsched",
+        "rev": "f090fc5c383aea0c4aa1e0c58cfb7836d2a42005",
+        "revCount": 210,
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/nodes-haffsched.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/nodes-haffsched.git"
+      }
+    },
+    "nosv_src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778160539,
+        "narHash": "sha256-eaK6svNahxp2UUDwzF9wn6Ds6VJls4Xm8B1Efr6QL3s=",
+        "ref": "hwc-perf-analysis",
+        "rev": "f6c19c404b0d1b042a79492479259af195b375ef",
+        "revCount": 946,
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/nos-v-haffsched.git"
+      },
+      "original": {
+        "ref": "hwc-perf-analysis",
+        "rev": "f6c19c404b0d1b042a79492479259af195b375ef",
+        "type": "git",
+        "url": "ssh://git@github.com/jandrovins/nos-v-haffsched.git"
+      }
+    },
+    "root": {
+      "inputs": {
+        "jungle": "jungle",
+        "nodes_src": "nodes_src",
+        "nosv_src": "nosv_src"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

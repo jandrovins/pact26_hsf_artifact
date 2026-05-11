@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+cd /nfs/home/Computational/varcila/ics_amdblis
+nix develop --impure
+cd /nfs/home/Computational/varcila/ics_amdblis/cholesky-v2
+mkdir -p out
+
+bin=$1
+nsize=$2
+ts=$3
+imm=$4
+ovni=${5:-none}
+
+params="$nsize $ts 1"
+
+timestamp=$(date +%s)
+export OVNI_TRACEDIR=ovni_${VVV_EXP_STR}_$timestamp
+
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},instrumentation.version=$ovni
+export NOSV_CONFIG_OVERRIDE=${NOSV_CONFIG_OVERRIDE},scheduler.immediate_successor=$imm
+export NOSV_CONFIG=nosv.toml
+
+# Note: Using system nOS-V from Nix store (LD_PRELOAD not needed)
+
+
+echo $VVV_TG_ENABLED
+
+ulimit -c unlimited
+echo ppn=$SLURM_NTASKS_PER_NODE nprocs=$SLURM_NPROCS cpus_per_task=$SRUN_CPUS_PER_TASK
+set -x
+
+
+srun -v --hint=nomultithread \
+	--exclusive \
+	--cpu-bind=verbose,none \
+	-N $SLURM_JOB_NUM_NODES \
+	--ntasks-per-node=$SLURM_NTASKS_PER_NODE \
+	--cpus-per-task=$SRUN_CPUS_PER_TASK \
+	./${bin} $params
+	#./perf_mem_run.sh ./${bin} t1 $params
+
+
+if [ "$ovni" == "ovni" ]; then
+	ovniemu -b $OVNI_TRACEDIR
+fi
