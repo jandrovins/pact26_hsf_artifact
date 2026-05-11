@@ -34,6 +34,6 @@ nix develop --impure "$BASE_ROOT" --command bash -c "
         --cpu-bind=verbose,none \
         -N \$SLURM_JOB_NUM_NODES \
         --ntasks-per-node=1 \
-        --cpus-per-task=\$SRUN_CPUS_PER_TASK \
+        --cpus-per-task=\$SLURM_CPUS_PER_TASK \
         '$BENCH_DIR/$bin' $params
 "
