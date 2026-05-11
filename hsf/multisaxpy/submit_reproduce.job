@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for HSF Multisaxpy
+# Arguments: <binary> <N> <TS> <iterations>
+# =============================================================================
+
+bin=$1
+N=$2
+TS=$3
+iterations=$4
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/hsf"
+BENCH_DIR="$BASE_ROOT/multisaxpy"
+
+export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"
+
+echo "=== Multisaxpy HSF: N=$N TS=$TS its=$iterations ==="
+echo "VVV_TG_ENABLED=${VVV_TG_ENABLED} VVV_LOWER_LVL=${VVV_LOWER_LVL} VVV_TG_POLICY=${VVV_TG_POLICY}"
+
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    cd '$BENCH_DIR'
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin...'
+        make '$bin'
+    fi
+    ulimit -c unlimited
+    srun -v --hint=nomultithread \
+        --exclusive \
+        --cpu-bind=verbose \
+        -N \$SLURM_JOB_NUM_NODES \
+        --ntasks-per-node=1 \
+        --cpus-per-task=\$SRUN_CPUS_PER_TASK \
+        '$BENCH_DIR/$bin' $N $TS $iterations
+"
