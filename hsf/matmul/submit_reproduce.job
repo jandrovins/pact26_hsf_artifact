@@ -23,7 +23,6 @@ echo "VVV_TG_ENABLED=$VVV_TG_ENABLED VVV_LOWER_LVL=$VVV_LOWER_LVL VVV_UPPER_LVL=
 nix develop --impure "$BASE_ROOT" --command bash -c "
     set -e
     cd '$BENCH_DIR'
-    mkdir -p build
     if [ ! -f '$bin' ]; then
         echo 'Building...'
         make

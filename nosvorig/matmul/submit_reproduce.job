@@ -22,7 +22,6 @@ echo "=== Matmul nosvorig: N=$N M=$M TS=$TS ITS=$ITS ==="
 nix develop --impure "$BASE_ROOT" --command bash -c "
     set -e
     cd '$BENCH_DIR'
-    mkdir -p build
     if [ ! -f '$bin' ]; then
         echo 'Building...'
         make

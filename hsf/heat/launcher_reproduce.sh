@@ -55,7 +55,7 @@ main() {
         export VVV_PRIORITY=0
         export VVV_BLOCKFUNC=0
         export NOSV_CONFIG=nosv.toml
-        export NOSV_CONFIG_OVERRIDE="topology.binding=${topo_bind},monitoring.enabled=false,monitoring.verbose=false,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
+        export NOSV_CONFIG_OVERRIDE="topology.binding=${topo_bind},hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
 
         export VVV_EXP_STR="n${n}_bs${bs}_its${its}_lower${lower}_upper${upper}_flex${flex}"
 

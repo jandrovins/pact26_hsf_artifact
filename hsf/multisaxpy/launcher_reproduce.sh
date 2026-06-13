@@ -48,7 +48,7 @@ main() {
         export VVV_TG_POLICY=$policy
         export VVV_MMAP_ENABLED=1
         export NOSV_CONFIG=nosv.toml
-        export NOSV_CONFIG_OVERRIDE="topology.binding=${topo_bind},monitoring.enabled=false,monitoring.verbose=false,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
+        export NOSV_CONFIG_OVERRIDE="topology.binding=${topo_bind},hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
         export SLURM_NTASKS_PER_NODE=1
         export SLURM_NPROCS=1
         export SRUN_CPUS_PER_TASK=$cpus

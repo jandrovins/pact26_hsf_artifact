@@ -9,7 +9,7 @@ set -u
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-readonly BIN="build/02.matmul_ompss2_itampi.bin"
+readonly BIN="02.matmul_ompss2_itampi.bin"
 readonly NREPS=3
 readonly PARTITION="${PARTITION:-fox}"
 

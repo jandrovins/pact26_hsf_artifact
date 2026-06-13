@@ -47,7 +47,7 @@ run_config() {
     export VVV_PRIORITY_ENABLED=1
     export VVV_CHOL_GEMM_TILES_PER_BLOCK=48
     export NOSV_CONFIG=nosv.toml
-    export NOSV_CONFIG_OVERRIDE="topology.binding=inherit,monitoring.enabled=false,monitoring.verbose=false,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
+    export NOSV_CONFIG_OVERRIDE="topology.binding=inherit,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
 
     export VVV_EXP_STR="N${nsize}_TS${ts}_lower${lower}_upper${upper}_flex${affflex}"
 
