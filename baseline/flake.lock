@@ -1,0 +1,46 @@
+{
+  "nodes": {
+    "jungle": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1773397208,
+        "narHash": "sha256-zRGiEmm0RWsXsyzFO9M08wOchu1JfoqcQwJ8W8tYiNM=",
+        "ref": "tglib",
+        "rev": "dfc4fd0dc5054d2483c027b715bee3a7cff90b20",
+        "revCount": 1536,
+        "type": "git",
+        "url": "https://github.com/jandrovins/jungle.git"
+      },
+      "original": {
+        "ref": "tglib",
+        "type": "git",
+        "url": "https://github.com/jandrovins/jungle.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1767634882,
+        "narHash": "sha256-2GffSfQxe3sedHzK+sTKlYo/NTIAGzbFCIsNMUPAAnk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3c9db02515ef1d9b6b709fc60ba9a540957f661c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "jungle": "jungle"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

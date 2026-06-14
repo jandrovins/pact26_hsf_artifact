@@ -16,6 +16,11 @@ for launcher in \
     hsf/hpccg/launcher_reproduce.sh \
     hsf/matmul/launcher_reproduce.sh \
     hsf/multisaxpy/launcher_reproduce.sh \
+    baseline/cholesky/launcher_reproduce.sh \
+    baseline/heat/launcher_reproduce.sh \
+    baseline/hpccg/launcher_reproduce.sh \
+    baseline/matmul/launcher_reproduce.sh \
+    baseline/multisaxpy/launcher_reproduce.sh \
 ; do
     echo ""
     echo "--- Running $launcher ---"

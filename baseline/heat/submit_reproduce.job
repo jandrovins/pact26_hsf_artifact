@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for baseline Heat (OpenMP)
+# Arguments: <binary> <N> <BS> <ITS> <CPUS> <NUMA> <PROCBIND>
+# =============================================================================
+
+bin=$1
+N=$2
+BS=$3
+ITS=$4
+CPUS=$5
+NUMA=$6
+PROCBIND=$7
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/baseline"
+BENCH_DIR="$BASE_ROOT/heat"
+
+echo "=== Heat baseline: N=$N BS=$BS ITS=$ITS NUMA=$NUMA PROCBIND=$PROCBIND ==="
+
+echo "[TIMING] before nix develop: $(date +%T.%N)"
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    echo \"[TIMING] inside nix shell: \$(date +%T.%N)\"
+    cd '$BENCH_DIR'
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin...'
+        make '$bin'
+    fi
+    echo \"[TIMING] after build check: \$(date +%T.%N)\"
+    ulimit -c unlimited
+    export VVV_NUMA_INTERLEAVED=$NUMA
+    export OMP_PROC_BIND=$PROCBIND
+    export OMP_NUM_THREADS=$CPUS
+    if [ '$CPUS' = '96' ]; then
+        taskset -c 0-95 '$BENCH_DIR/$bin' -s $N -t $ITS -b $BS
+    else
+        '$BENCH_DIR/$bin' -s $N -t $ITS -b $BS
+    fi
+    echo \"[TIMING] after run: \$(date +%T.%N)\"
+"
+echo "[TIMING] after nix develop exit: $(date +%T.%N)"

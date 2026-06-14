@@ -13,13 +13,20 @@ pact_consolidated/
 │   ├── hpccg/
 │   ├── matmul/
 │   └── multisaxpy/
-├── nosvorig/                   # Baseline benchmarks (unmodified nOS-V v4.0.0)
+├── nosvorig/                   # OmpSs-2 baseline benchmarks (unmodified nOS-V v4.0.0)
 │   ├── flake.nix               # Nix flake (nOS-V v4.0.0 + NODES 1.4.0)
 │   ├── cholesky/
 │   ├── heat/
 │   ├── hpccg/
 │   ├── matmul/
 │   └── multisaxpy/
+├── baseline/                   # External baseline (pure OpenMP/MPI, no OmpSs-2)
+│   ├── flake.nix               # Nix flake (clang + OpenMP + MPI + AMD BLIS/libFLAME)
+│   ├── cholesky/               # LAPACKE_dpotrf via libFLAME+BLIS
+│   ├── heat/                   # OpenMP Gauss-Seidel
+│   ├── hpccg/                  # MPI+OpenMP CG
+│   ├── matmul/                 # OpenMP cblas_dgemm (mt-dgemm)
+│   └── multisaxpy/             # OpenMP SAXPY
 ├── results/                    # Original paper results (10-30 reps)
 ├── reproduced_results/         # Reproduced results (3 reps per config)
 ├── collect_results.py          # Parse SLURM output -> summary CSVs
@@ -27,12 +34,20 @@ pact_consolidated/
 └── plot_benchmarks_latex.py    # Generate figures from original results
 ```
 
-Each benchmark directory contains:
+Each `hsf/` and `nosvorig/` benchmark directory contains:
 - Source code and Makefile
 - `nosv.toml` — nOS-V runtime configuration
 - `launcher_reproduce.sh` — SLURM launcher for reproduction
 - `submit_reproduce.job` — SLURM batch script
 - `README.md` — Benchmark description and HSF/baseline details
+
+The `baseline/` benchmark directories contain only source code, a Makefile, and
+the `launcher_reproduce.sh` / `submit_reproduce.job` pair — these are pure
+OpenMP/MPI binaries with no nOS-V runtime, so there is no `nosv.toml`. They
+provide the external (non-OmpSs-2) reference the figures normalize against
+(`fox_cholesky_libflame`, `fox_heat_omp`, `fox_hpccg_omp`, `fox_mt-dgemm_libomp`,
+`fox_multisaxpy_omp`). The benchmark Makefiles target the Fox architecture
+explicitly (`-march=znver4`) so binaries are correct even when built off-cluster.
 
 ## Prerequisites
 
@@ -54,16 +69,33 @@ hsf/hpccg/launcher_reproduce.sh
 hsf/matmul/launcher_reproduce.sh
 hsf/multisaxpy/launcher_reproduce.sh
 
-# Baseline (nosvorig)
+# OmpSs-2 baseline (nosvorig)
 nosvorig/cholesky/launcher_reproduce.sh
 nosvorig/heat/launcher_reproduce.sh
 nosvorig/hpccg/launcher_reproduce.sh
 nosvorig/matmul/launcher_reproduce.sh
 nosvorig/multisaxpy/launcher_reproduce.sh
+
+# External baseline (pure OpenMP/MPI)
+baseline/cholesky/launcher_reproduce.sh
+baseline/heat/launcher_reproduce.sh
+baseline/hpccg/launcher_reproduce.sh
+baseline/matmul/launcher_reproduce.sh
+baseline/multisaxpy/launcher_reproduce.sh
 ```
 
+Or submit everything at once with `bash launch_all.sh`.
+
 Each launcher submits SLURM array jobs with 3 repetitions per configuration.
-Output goes to `reproduced_results/fox_<benchmark>_<variant>/results_final_3bs/raw/`.
+Output goes to `reproduced_results/fox_<benchmark>_<variant>/results_final_3bs/raw/`
+(the `baseline/` launchers omit the `results_final_3bs/` level, writing directly
+to `reproduced_results/fox_<benchmark>_<variant>/raw/`).
+
+> **Note (cholesky external baseline):** the `baseline/cholesky` launcher
+> reproduces n=6144 and n=33792 (the sizes used in the figures). n=49152 is
+> omitted: its matrix exceeds 2³¹ elements and needs an ILP64 libFLAME, whereas
+> the Nix flake provides LP64. mt-dgemm n=49152 is unaffected (BLIS uses 64-bit
+> internal indices).
 
 ### 2. Collect results
 

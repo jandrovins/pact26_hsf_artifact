@@ -149,6 +149,61 @@ def parse_multisaxpy_nosvorig(line):
 
 
 # ---------------------------------------------------------------------------
+# Baseline (external, non-OmpSs-2) parsers — one result per job*.out (whole file)
+#
+# These binaries run once per SLURM array task, so each job*.out holds exactly
+# one measurement. Parse the whole file (the metric may span multiple lines).
+# ---------------------------------------------------------------------------
+
+def baseline_cholesky(text):
+    """Cholesky libFLAME: 'Printing result:  <time> <gflops> <N>'."""
+    m = re.search(r"Printing result:\s+([\d.eE+-]+)\s+([\d.eE+-]+)\s+\d+", text)
+    if m:
+        return {"duration_s": float(m.group(1)), "gflops": float(m.group(2))}
+    return None
+
+
+def baseline_heat(text):
+    """Heat OpenMP: '<time> <throughput> <0> <r> <c> <rbs> <cbs> <its> heat_omp'."""
+    m = re.search(
+        r"^\s*([\d.eE+-]+)\s+([\d.eE+-]+)\s+[\d.eE+-]+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+heat_omp",
+        text, re.MULTILINE,
+    )
+    if m:
+        return {"delta_time": float(m.group(1)), "throughput": float(m.group(2))}
+    return None
+
+
+def baseline_hpccg(text):
+    """HPCCG: 'Time Summary:' Total (s) and 'MFLOPS Summary:' Total."""
+    mt = re.search(r"Time Summary:\s*\n\s*Total\s*:\s*([\d.eE+-]+)", text)
+    mm = re.search(r"MFLOPS Summary:\s*\n\s*Total\s*:\s*([\d.eE+-]+)", text)
+    if mt and mm:
+        return {"time_s": float(mt.group(1)), "mflops": float(mm.group(1))}
+    return None
+
+
+def baseline_matmul(text):
+    """mt-dgemm: 'Multiply time:  <t> seconds' and 'GFLOP/s rate:  <g> GF/s'."""
+    mt = re.search(r"Multiply time:\s+([\d.eE+-]+)\s+seconds", text)
+    mg = re.search(r"GFLOP/s rate:\s+([\d.eE+-]+)\s+GF/s", text)
+    if mt and mg:
+        return {"duration_s": float(mt.group(1)), "gflops": float(mg.group(1))}
+    return None
+
+
+def baseline_multisaxpy(text):
+    """multisaxpy_smp: '<time> <gflops> <N> NaN <its> multisaxpy_smp'."""
+    m = re.search(
+        r"^\s*([\d.eE+-]+)\s+([\d.eE+-]+)\s+\d+\s+NaN\s+\d+\s+multisaxpy_smp",
+        text, re.MULTILINE,
+    )
+    if m:
+        return {"duration_s": float(m.group(1)), "gflops": float(m.group(2))}
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Metadata parser — extract config from experiment string in filename
 # ---------------------------------------------------------------------------
 
@@ -201,6 +256,31 @@ def scan_raw_dir(raw_dir, parser):
                         row.update(parsed)
                         results.append(row)
     return results
+
+
+def scan_baseline(raw_dir, file_parser):
+    """One result per job*.out (whole-file parse). Returns {exp: (meta, [runs])}."""
+    out = {}
+    raw_path = Path(raw_dir)
+    if not raw_path.exists():
+        return out
+    for exp_dir in sorted(raw_path.iterdir()):
+        if not exp_dir.is_dir():
+            continue
+        meta_file = exp_dir / "exp_meta.json"
+        if meta_file.exists():
+            with open(meta_file) as f:
+                meta = json.load(f)
+        else:
+            meta = {"experiment": exp_dir.name}
+        runs = []
+        for out_file in sorted(exp_dir.glob("job*.out")):
+            parsed = file_parser(out_file.read_text())
+            if parsed:
+                runs.append(parsed)
+        if runs:
+            out[exp_dir.name] = (meta, runs)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -595,6 +675,131 @@ def collect_multisaxpy(variant, subdir, results_dir):
 
 
 # ---------------------------------------------------------------------------
+# Baseline (external OpenMP/MPI) collectors — summary.csv columns match the
+# competitor summaries in results/fox_<bench>_<variant>/summary.csv
+# ---------------------------------------------------------------------------
+
+def collect_cholesky_baseline(results_dir):
+    base = Path(results_dir) / "fox_cholesky_libflame"
+    data = scan_baseline(base / "raw", baseline_cholesky)
+    if not data:
+        print("  No data for cholesky baseline (libflame)")
+        return
+    rows = []
+    for exp_name, (meta, runs) in sorted(data.items()):
+        nruns, mean_t, med_t, min_t, max_t, std_t = compute_stats([r["duration_s"] for r in runs])
+        _, mean_g, _, _, _, std_g = compute_stats([r["gflops"] for r in runs])
+        rows.append({
+            "experiment": exp_name,
+            "ppn": meta.get("ppn", 1), "cpuspertask": meta.get("cpuspertask", ""),
+            "nsize": meta.get("nsize", ""), "numa": meta.get("numa", ""),
+            "nruns": nruns,
+            "mean_time": mean_t, "median_time": med_t, "min_time": min_t,
+            "max_time": max_t, "std_time": std_t,
+            "mean_gflops": mean_g, "std_gflops": std_g,
+        })
+    write_csv(base / "summary.csv", list(rows[0].keys()), rows)
+    print(f"  Wrote {base / 'summary.csv'} ({len(rows)} configs)")
+
+
+def collect_heat_baseline(results_dir):
+    base = Path(results_dir) / "fox_heat_omp"
+    data = scan_baseline(base / "raw", baseline_heat)
+    if not data:
+        print("  No data for heat baseline (omp)")
+        return
+    rows = []
+    for exp_name, (meta, runs) in sorted(data.items()):
+        nruns, mean_t, med_t, min_t, max_t, std_t = compute_stats([r["delta_time"] for r in runs])
+        _, mean_tp, _, _, _, std_tp = compute_stats([r["throughput"] for r in runs])
+        rows.append({
+            "experiment": exp_name,
+            "ppn": meta.get("ppn", 1), "cpuspertask": meta.get("cpuspertask", ""),
+            "n": meta.get("n", ""), "bs": meta.get("bs", ""), "its": meta.get("its", ""),
+            "numa": meta.get("numa", ""), "procbind": meta.get("procbind", ""),
+            "nruns": nruns,
+            "mean_time": mean_t, "median_time": med_t, "min_time": min_t,
+            "max_time": max_t, "std_time": std_t,
+            "mean_throughput": mean_tp, "std_throughput": std_tp,
+        })
+    write_csv(base / "summary.csv", list(rows[0].keys()), rows)
+    print(f"  Wrote {base / 'summary.csv'} ({len(rows)} configs)")
+
+
+def collect_hpccg_baseline(results_dir):
+    base = Path(results_dir) / "fox_hpccg_omp"
+    data = scan_baseline(base / "raw", baseline_hpccg)
+    if not data:
+        print("  No data for hpccg baseline (omp)")
+        return
+    rows = []
+    for exp_name, (meta, runs) in sorted(data.items()):
+        nruns, mean_t, med_t, min_t, max_t, std_t = compute_stats([r["time_s"] for r in runs])
+        _, mean_mf, _, _, _, std_mf = compute_stats([r["mflops"] for r in runs])
+        rows.append({
+            "experiment": exp_name,
+            "ppn": meta.get("ppn", 1), "cpuspertask": meta.get("cpuspertask", ""),
+            "nx": meta.get("nx", ""), "ny": meta.get("ny", ""), "nz": meta.get("nz", ""),
+            "maxit": meta.get("maxit", ""), "nzlocal": meta.get("nzlocal", ""),
+            "numa": meta.get("numa", ""),
+            "nruns": nruns,
+            "mean_time": mean_t, "median_time": med_t, "min_time": min_t,
+            "max_time": max_t, "std_time": std_t,
+            "mean_mflops": mean_mf, "std_mflops": std_mf,
+        })
+    write_csv(base / "summary.csv", list(rows[0].keys()), rows)
+    print(f"  Wrote {base / 'summary.csv'} ({len(rows)} configs)")
+
+
+def collect_matmul_baseline(results_dir):
+    base = Path(results_dir) / "fox_mt-dgemm_libomp"
+    data = scan_baseline(base / "raw", baseline_matmul)
+    if not data:
+        print("  No data for matmul baseline (mt-dgemm)")
+        return
+    rows = []
+    for exp_name, (meta, runs) in sorted(data.items()):
+        nruns, mean_t, med_t, min_t, max_t, std_t = compute_stats([r["duration_s"] for r in runs])
+        _, mean_g, _, _, _, std_g = compute_stats([r["gflops"] for r in runs])
+        rows.append({
+            "experiment": exp_name,
+            "ppn": meta.get("ppn", 1), "cpuspertask": meta.get("cpuspertask", ""),
+            "nsize": meta.get("nsize", ""), "msize": meta.get("msize", ""),
+            "its": meta.get("its", ""), "numa": meta.get("numa", ""),
+            "nruns": nruns,
+            "mean_time": mean_t, "median_time": med_t, "min_time": min_t,
+            "max_time": max_t, "std_time": std_t,
+            "mean_gflops": mean_g, "std_gflops": std_g,
+        })
+    write_csv(base / "summary.csv", list(rows[0].keys()), rows)
+    print(f"  Wrote {base / 'summary.csv'} ({len(rows)} configs)")
+
+
+def collect_multisaxpy_baseline(results_dir):
+    base = Path(results_dir) / "fox_multisaxpy_omp"
+    data = scan_baseline(base / "raw", baseline_multisaxpy)
+    if not data:
+        print("  No data for multisaxpy baseline (omp)")
+        return
+    rows = []
+    for exp_name, (meta, runs) in sorted(data.items()):
+        nruns, mean_t, med_t, min_t, max_t, std_t = compute_stats([r["duration_s"] for r in runs])
+        _, mean_g, _, _, _, std_g = compute_stats([r["gflops"] for r in runs])
+        rows.append({
+            "experiment": exp_name,
+            "ppn": meta.get("ppn", 1), "cpuspertask": meta.get("cpuspertask", ""),
+            "nsize": meta.get("nsize", ""), "iters": meta.get("iters", ""),
+            "numa": meta.get("numa", ""), "procbind": meta.get("procbind", ""),
+            "nruns": nruns,
+            "mean_time": mean_t, "median_time": med_t, "min_time": min_t,
+            "max_time": max_t, "std_time": std_t,
+            "mean_gflops": mean_g, "std_gflops": std_g,
+        })
+    write_csv(base / "summary.csv", list(rows[0].keys()), rows)
+    print(f"  Wrote {base / 'summary.csv'} ({len(rows)} configs)")
+
+
+# ---------------------------------------------------------------------------
 # CSV writer
 # ---------------------------------------------------------------------------
 
@@ -640,6 +845,13 @@ def main():
     print("\n=== Multisaxpy ===")
     collect_multisaxpy("init", "results_final_3bs_init_tasks", rd)
     collect_multisaxpy("tg", "results_final_3bs", rd)
+
+    print("\n=== Baseline (external OpenMP/MPI) ===")
+    collect_cholesky_baseline(rd)
+    collect_heat_baseline(rd)
+    collect_hpccg_baseline(rd)
+    collect_matmul_baseline(rd)
+    collect_multisaxpy_baseline(rd)
 
     print("\nDone.")
 

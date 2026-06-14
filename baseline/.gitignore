@@ -1,0 +1,11 @@
+# Build artifacts (binaries are built on first run by submit_reproduce.job)
+*.o
+*.bin
+obj/
+matmul/mt-dgemm
+hpccg/test_HPCCG
+multisaxpy/multisaxpy_smp
+multisaxpy/multisaxpy_mpi
+
+# direnv / nix
+.direnv/

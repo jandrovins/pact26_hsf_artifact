@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for baseline Matmul (mt-dgemm)
+# Arguments: <binary> <N> <ITS> <CPUS> <NUMA>
+#
+# Built with `make numa` so USE_NUMA_INTERLEAVE is defined and VVV_NUMA_INTERLEAVED
+# actually controls allocation (otherwise numa 0/1 would be identical).
+# =============================================================================
+
+bin=$1
+N=$2
+ITS=$3
+CPUS=$4
+NUMA=$5
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/baseline"
+BENCH_DIR="$BASE_ROOT/matmul"
+
+echo "=== Matmul baseline: N=$N ITS=$ITS CPUS=$CPUS NUMA=$NUMA ==="
+
+echo "[TIMING] before nix develop: $(date +%T.%N)"
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    echo \"[TIMING] inside nix shell: \$(date +%T.%N)\"
+    cd '$BENCH_DIR'
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin (numa target)...'
+        make numa
+    fi
+    echo \"[TIMING] after build check: \$(date +%T.%N)\"
+    ulimit -c unlimited
+    export VVV_NUMA_INTERLEAVED=$NUMA
+    export OMP_NUM_THREADS=$CPUS
+    export BLIS_NUM_THREADS=$CPUS
+    export AOCL_ENABLE_INSTRUCTIONS=AVX512
+    if [ '$CPUS' = '96' ]; then
+        taskset -c 0-95 '$BENCH_DIR/$bin' $N $ITS
+    else
+        '$BENCH_DIR/$bin' $N $ITS
+    fi
+    echo \"[TIMING] after run: \$(date +%T.%N)\"
+"
+echo "[TIMING] after nix develop exit: $(date +%T.%N)"

@@ -1,0 +1,23 @@
+if(NANOS6_FOUND)
+  mk_bench(b6_multisaxpy_nanos6)
+  target_sources(b6_multisaxpy_nanos6 PRIVATE multisaxpy-smp.cpp)
+  target_link_libraries(b6_multisaxpy_nanos6 PRIVATE Nanos6::nanos6)
+
+  if(MPI_FOUND)
+    mk_bench(b6_multisaxpy_mpi_nanos6)
+    target_sources(b6_multisaxpy_mpi_nanos6 PRIVATE multisaxpy-mpi.cpp)
+    target_link_libraries(b6_multisaxpy_mpi_nanos6 PRIVATE MPI::MPI_C Nanos6::nanos6)
+  endif(MPI_FOUND)
+endif()
+
+if(NODES_FOUND)
+  mk_bench(b6_multisaxpy_nodes)
+  target_sources(b6_multisaxpy_nodes PRIVATE multisaxpy-smp.cpp)
+  target_link_libraries(b6_multisaxpy_nodes PRIVATE Nodes::nodes)
+
+  if(MPI_FOUND)
+    mk_bench(b6_multisaxpy_mpi_nodes)
+    target_sources(b6_multisaxpy_mpi_nodes PRIVATE multisaxpy-mpi.cpp)
+    target_link_libraries(b6_multisaxpy_mpi_nodes PRIVATE MPI::MPI_C Nodes::nodes)
+  endif(MPI_FOUND)
+endif()

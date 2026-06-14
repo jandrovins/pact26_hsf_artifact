@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for baseline Cholesky (libFLAME)
+# Arguments: <binary> <N> <CPUS> <NUMA>
+# =============================================================================
+
+bin=$1
+N=$2
+CPUS=$3
+NUMA=$4
+
+BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/baseline"
+BENCH_DIR="$BASE_ROOT/cholesky"
+
+echo "=== Cholesky baseline: N=$N CPUS=$CPUS NUMA=$NUMA ==="
+
+echo "[TIMING] before nix develop: $(date +%T.%N)"
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    echo \"[TIMING] inside nix shell: \$(date +%T.%N)\"
+    cd '$BENCH_DIR'
+    if [ ! -f '$bin' ]; then
+        echo 'Building $bin...'
+        make '$bin'
+    fi
+    echo \"[TIMING] after build check: \$(date +%T.%N)\"
+    ulimit -c unlimited
+    export VVV_NUMA_INTERLEAVED=$NUMA
+    export OMP_NUM_THREADS=$CPUS
+    export BLIS_NUM_THREADS=$CPUS
+    export AOCL_ENABLE_INSTRUCTIONS=AVX512
+    if [ '$CPUS' = '96' ]; then
+        taskset -c 0-95 '$BENCH_DIR/$bin' $N
+    else
+        '$BENCH_DIR/$bin' $N
+    fi
+    echo \"[TIMING] after run: \$(date +%T.%N)\"
+"
+echo "[TIMING] after nix develop exit: $(date +%T.%N)"
