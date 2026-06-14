@@ -21,14 +21,17 @@ echo "=== HPCCG HSF: nx=$nx ny=$ny nz=$nz ntasks=$ntasks ==="
 echo "VVV_TG_ENABLED=$VVV_TG_ENABLED VVV_LOWER_LVL=$VVV_LOWER_LVL"
 echo "VVV_SPMV_TG_ENABLED=${VVV_SPMV_TG_ENABLED:-0} VVV_SPMV_POLICY=${VVV_SPMV_POLICY:-}"
 
+echo "[TIMING] before nix develop: $(date +%T.%N)"
 nix develop --impure "$BASE_ROOT" --command bash -c "
     set -e
+    echo \"[TIMING] inside nix shell: \$(date +%T.%N)\"
     cd '$BENCH_DIR'
     mkdir -p obj
     if [ ! -f '$bin' ]; then
         echo 'Building $bin...'
         make -B HPCCG_mpi_oss-notampi.bin
     fi
+    echo \"[TIMING] after build check: \$(date +%T.%N)\"
     ulimit -c unlimited
     srun -v --hint=nomultithread \
         --exclusive \
@@ -37,4 +40,6 @@ nix develop --impure "$BASE_ROOT" --command bash -c "
         --ntasks-per-node=1 \
         --cpus-per-task=\$SLURM_CPUS_PER_TASK \
         '$BENCH_DIR/$bin' t1 $params
+    echo \"[TIMING] after srun: \$(date +%T.%N)\"
 "
+echo "[TIMING] after nix develop exit: $(date +%T.%N)"

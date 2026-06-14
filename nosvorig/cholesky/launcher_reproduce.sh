@@ -69,7 +69,7 @@ METAEOF
             local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
 
             echo "  [$variant] N=$nsize TS=$ts cpus=$cpus numa=$numa_interleaved"
-            sbatch -p "$PARTITION" --array=1-${NREPS} \
+            sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
                 --switches=1 --export=ALL \
                 -N 1 --ntasks-per-node=1 --cpus-per-task=$cpus \
                 --output="${nfs_raw}/job%A_%a.out" \

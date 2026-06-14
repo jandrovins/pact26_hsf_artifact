@@ -8,6 +8,7 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
 
 readonly BIN="02.matmul_ompss2_itampi.bin"
 readonly NREPS=3
@@ -73,7 +74,7 @@ METAEOF
         local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
 
         echo "  [tg] N=$n TS=$ts lower=$lower upper=$upper flex=$affflex"
-        sbatch -p "$PARTITION" --array=1-${NREPS} \
+        sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
             --switches=1 --export=ALL \
             -N 1 --ntasks-per-node=1 --cpus-per-task=$cpus \
             --output="${nfs_raw}/job%A_%a.out" \

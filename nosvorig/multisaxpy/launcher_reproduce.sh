@@ -9,6 +9,7 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
 
 readonly BIN="b6_multisaxpy_prio"
 readonly NREPS=3
@@ -68,7 +69,7 @@ METAEOF
         local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
 
         echo "  [init] N=$n TS=$ts its=$iterations cpus=$cpus imm=$imm prio=$prio"
-        sbatch -p "$PARTITION" --array=1-${NREPS} \
+        sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
             --switches=1 --export=ALL \
             -N 1 --ntasks-per-node=1 --cpus-per-task=$cpus \
             --output="${nfs_raw}/job%A_%a.out" \

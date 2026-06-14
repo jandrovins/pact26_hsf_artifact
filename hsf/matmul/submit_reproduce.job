@@ -20,13 +20,16 @@ export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=non
 echo "=== Matmul HSF: N=$N M=$M TS=$TS ITS=$ITS ==="
 echo "VVV_TG_ENABLED=$VVV_TG_ENABLED VVV_LOWER_LVL=$VVV_LOWER_LVL VVV_UPPER_LVL=$VVV_UPPER_LVL"
 
+echo "[TIMING] before nix develop: $(date +%T.%N)"
 nix develop --impure "$BASE_ROOT" --command bash -c "
     set -e
+    echo \"[TIMING] inside nix shell: \$(date +%T.%N)\"
     cd '$BENCH_DIR'
     if [ ! -f '$bin' ]; then
         echo 'Building...'
         make
     fi
+    echo \"[TIMING] after build check: \$(date +%T.%N)\"
     ulimit -c unlimited
     srun -v --hint=nomultithread \
         --exclusive \
@@ -35,4 +38,6 @@ nix develop --impure "$BASE_ROOT" --command bash -c "
         --ntasks-per-node=1 \
         --cpus-per-task=\$SLURM_CPUS_PER_TASK \
         '$BENCH_DIR/$bin' $params
+    echo \"[TIMING] after srun: \$(date +%T.%N)\"
 "
+echo "[TIMING] after nix develop exit: $(date +%T.%N)"

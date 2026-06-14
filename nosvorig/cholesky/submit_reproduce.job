@@ -17,13 +17,16 @@ export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=non
 echo "=== Cholesky nosvorig: N=$nsize TS=$ts ==="
 echo "NOSV_CONFIG_OVERRIDE=$NOSV_CONFIG_OVERRIDE"
 
+echo "[TIMING] before nix develop: $(date +%T.%N)"
 nix develop --impure "$BASE_ROOT" --command bash -c "
     set -e
+    echo \"[TIMING] inside nix shell: \$(date +%T.%N)\"
     cd '$BENCH_DIR'
     if [ ! -f '$bin' ]; then
         echo 'Building $bin...'
         make '$bin'
     fi
+    echo \"[TIMING] after build check: \$(date +%T.%N)\"
     ulimit -c unlimited
     srun -v --hint=nomultithread \
         --exclusive \
@@ -32,4 +35,6 @@ nix develop --impure "$BASE_ROOT" --command bash -c "
         --ntasks-per-node=1 \
         --cpus-per-task=\$SLURM_CPUS_PER_TASK \
         ./$bin $params
+    echo \"[TIMING] after srun: \$(date +%T.%N)\"
 "
+echo "[TIMING] after nix develop exit: $(date +%T.%N)"
