@@ -8,8 +8,7 @@ Generates PDFs (and matching PNGs) into ``fig/``:
   * ``benchmark_comparison_external_baseline`` — 2x5 normalized to the external
                                       (OpenMP/AMD-Math) baseline at y=1.0
   * ``benchmark_speedup_geomean``   — per-benchmark geomean speedup bars
-  * ``benchmark_speedup_heatmap``   — speedup heatmap, all configs at once
-  * ``benchmark_scaling_curves``    — perf vs. task size, Orig vs. TG
+  * ``benchmark_speedup_geomean_init`` — geomean speedup using OmpSs-2 with parallel-init
 
 Usage:
     python plot_reproduced.py                 # all figures, with LaTeX
@@ -980,187 +979,6 @@ def make_geomean_init_figure(out_dir: Path):
     save_fig(fig, out_dir, "benchmark_speedup_geomean_init")
 
 
-# ---------------------------------------------------------------------------
-# Figure B — speedup heatmap
-# ---------------------------------------------------------------------------
-
-def make_heatmap_figure(out_dir: Path):
-    print("\n[heatmap] benchmark_speedup_heatmap")
-    # Build the column index: list of (benchmark, size_label, ts) for every
-    # config that exists in either orig or tg.
-    bench_columns = []  # one list per benchmark
-    bench_data = []     # parallel: dict (size_label, ts) -> speedup or None
-    for cfg in BENCHMARKS:
-        df_orig, df_tg, df_init = load_all(cfg)
-        noinit = cfg.get("noinit_too_slow", False)
-        df_ref = df_init if noinit else df_orig
-        cols = []
-        data = {}
-        for size_val, slabel in [(cfg["small_size"], "S"),
-                                 (cfg["large_size"], "L")]:
-            ref_s = filter_size(df_ref, size_val)
-            tg_s  = filter_size(df_tg,  size_val)
-            ts_set = set()
-            if ref_s is not None:
-                ts_set |= set(int(t) for t in ref_s["_ts"].tolist())
-            if tg_s is not None:
-                ts_set |= set(int(t) for t in tg_s["_ts"].tolist())
-            for ts in sorted(ts_set):
-                cols.append((slabel, ts))
-                rv, _ = get_values(ref_s, ts) if ref_s is not None else (None, None)
-                tv, _ = get_values(tg_s,  ts) if tg_s  is not None else (None, None)
-                if rv and tv:
-                    data[(slabel, ts)] = tv / rv
-                else:
-                    data[(slabel, ts)] = None
-        bench_columns.append(cols)
-        bench_data.append(data)
-
-    # Total column count drives figure width.
-    total_cols = sum(len(c) for c in bench_columns)
-    n_rows = len(BENCHMARKS)
-
-    fig_w = max(6.0, 0.32 * total_cols + 1.5)
-    fig, ax = plt.subplots(figsize=(fig_w, 2.6), constrained_layout=True)
-
-    matrix = np.full((n_rows, total_cols), np.nan)
-    col_offset = 0
-    bench_col_starts = []
-    for r, cols in enumerate(bench_columns):
-        bench_col_starts.append(col_offset)
-        for j, key in enumerate(cols):
-            v = bench_data[r][key]
-            if v is not None:
-                matrix[r, col_offset + j] = v
-        col_offset += len(cols)
-
-    cmap = matplotlib.colormaps.get_cmap("RdBu_r").copy()
-    cmap.set_bad(color="#dddddd")
-    im = ax.imshow(matrix, aspect="auto", cmap=cmap,
-                   vmin=0.5, vmax=1.5, interpolation="nearest")
-
-    # Cell text
-    for r in range(n_rows):
-        for c in range(total_cols):
-            v = matrix[r, c]
-            if np.isnan(v):
-                ax.text(c, r, "--", ha="center", va="center",
-                        fontsize=5, color="gray")
-            else:
-                color = "white" if (v < 0.75 or v > 1.25) else "black"
-                ax.text(c, r, rf"${v:.2f}$",
-                        ha="center", va="center", fontsize=5.5, color=color)
-
-    # Y axis: benchmark names
-    ax.set_yticks(np.arange(n_rows))
-    ax.set_yticklabels([cfg["name"] for cfg in BENCHMARKS])
-
-    # X axis: ts labels under each cell
-    all_labels = []
-    for cols in bench_columns:
-        for slabel, ts in cols:
-            all_labels.append(f"{slabel}:{ts}")
-    ax.set_xticks(np.arange(total_cols))
-    ax.set_xticklabels(all_labels, rotation=60, ha="right", fontsize=5.5)
-
-    # Group separators between benchmarks
-    for start in bench_col_starts[1:]:
-        ax.axvline(start - 0.5, color="black", linewidth=0.6)
-
-    ax.set_xlabel(r"$\langle$size, block size$\rangle$ per benchmark", fontsize=7)
-    ax.tick_params(axis="x", which="major", pad=1)
-
-    cbar = fig.colorbar(im, ax=ax, fraction=0.025, pad=0.01)
-    cbar.set_label(r"Speedup (HSF / Baseline)", fontsize=7)
-    cbar.ax.tick_params(labelsize=6)
-
-    save_fig(fig, out_dir, "benchmark_speedup_heatmap")
-
-
-# ---------------------------------------------------------------------------
-# Figure C — scaling curves
-# ---------------------------------------------------------------------------
-
-def make_scaling_figure(out_dir: Path):
-    print("\n[scaling] benchmark_scaling_curves")
-    fig, axes = plt.subplots(2, 5, figsize=(9.0, 4.0), constrained_layout=True)
-
-    for col_idx, cfg in enumerate(BENCHMARKS):
-        df_orig, df_tg, df_init = load_all(cfg)
-        noinit = cfg.get("noinit_too_slow", False)
-        # For scaling: use init as the "baseline" line when no-init is too slow
-        df_base = df_init if noinit else df_orig
-        base_label = LABEL_INIT if noinit else LABEL_ORIG
-
-        for row_idx, (size_val, row_label) in enumerate([
-            (cfg["large_size"], "Large"),
-            (cfg["small_size"], "Small"),
-        ]):
-            ax = axes[row_idx, col_idx]
-            base_s = filter_size(df_base, size_val)
-            tg_s   = filter_size(df_tg,   size_val)
-
-            if base_s is None and tg_s is None:
-                ax.text(0.5, 0.5, "no data", transform=ax.transAxes,
-                        ha="center", va="center", fontsize=7, color="gray")
-                if row_idx == 0:
-                    ax.set_title(cfg["name"])
-                ax.set_xticks([])
-                ax.set_yticks([])
-                continue
-
-            for df_bar, color, marker, label in [
-                (base_s, COLOR_ORIG, "o", base_label),
-                (tg_s,   COLOR_TG,   "s", LABEL_TG),
-            ]:
-                if df_bar is None or len(df_bar) == 0:
-                    continue
-                d = df_bar.sort_values("_ts")  # type: ignore[call-overload]
-                ts_vals = d["_ts"].to_numpy()
-                m_vals  = d["_metric"].to_numpy()
-                s_vals  = d["_std"].to_numpy()
-                ax.plot(ts_vals, m_vals, marker=marker, markersize=3.5,
-                        linewidth=1.0, color=color, label=label, zorder=3)
-                ax.fill_between(ts_vals,
-                                m_vals - s_vals, m_vals + s_vals,
-                                color=color, alpha=0.18, linewidth=0, zorder=2)
-
-            unit = cfg.get("unit", "")
-            if row_idx == 0:
-                ax.set_title(cfg["name"], fontsize=8)
-            else:
-                xlabel = cfg.get("xlabel", "block size")
-                ax.set_xlabel(xlabel, fontsize=7)
-
-            if col_idx == 0:
-                ax.set_ylabel(rf"\textbf{{{row_label}}}" if matplotlib.rcParams["text.usetex"] else row_label,
-                              fontsize=8)
-
-            # Per-subplot unit annotation, low-right corner so it never collides
-            ax.text(0.97, 0.04, unit, transform=ax.transAxes,
-                    ha="right", va="bottom", fontsize=5.5, color="gray")
-
-            ax.set_xscale("log")
-            ax.tick_params(axis="both", which="major", labelsize=6, pad=1.5)
-            ax.tick_params(axis="both", which="minor", labelsize=0)
-            ax.grid(True, which="major", alpha=0.25, linewidth=0.4, zorder=0)
-            ax.set_axisbelow(True)
-
-    fig.supylabel(r"Performance (benchmark-native units)", fontsize=8)
-
-    legend_handles = [
-        Line2D([0], [0], color=COLOR_ORIG, marker="o", markersize=3.5,
-               linewidth=1.0, label=LABEL_ORIG),
-        Line2D([0], [0], color=COLOR_TG, marker="s", markersize=3.5,
-               linewidth=1.0, label=LABEL_TG),
-    ]
-    fig.legend(handles=legend_handles, loc="upper center",
-               ncol=2, bbox_to_anchor=(0.5, 1.04),
-               frameon=False, handlelength=1.8, columnspacing=1.6)
-
-    save_fig(fig, out_dir, "benchmark_scaling_curves")
-
-
 
 
 # ---------------------------------------------------------------------------
@@ -1172,8 +990,6 @@ FIGURES = {
     "main_ext": make_main_external_baseline_figure,
     "geomean": make_geomean_figure,
     "geomean_init": make_geomean_init_figure,
-    "heatmap": make_heatmap_figure,
-    "scaling": make_scaling_figure,
 }
 
 
