@@ -5,6 +5,8 @@ LaTeX-styled benchmark figures for reproduced results.
 Generates PDFs (and matching PNGs) into ``fig/``:
 
   * ``benchmark_comparison``        — main 2x5 normalized bar chart
+  * ``benchmark_comparison_external_baseline`` — 2x5 normalized to the external
+                                      (OpenMP/AMD-Math) baseline at y=1.0
   * ``benchmark_speedup_geomean``   — per-benchmark geomean speedup bars
   * ``benchmark_speedup_heatmap``   — speedup heatmap, all configs at once
   * ``benchmark_scaling_curves``    — perf vs. task size, Orig vs. TG
@@ -120,6 +122,78 @@ BENCHMARKS = [
         # 2 arrays (x, y) of doubles, TS elements per task -> 16 * TS bytes
         "xlabel": "Memory per Task",
         "ts_label_fn": lambda ts: _fmt_bytes(2 * 8 * int(ts)),
+    },
+]
+
+# External (non-OmpSs-2) baseline used as the y=1.0 reference: the pure
+# OpenMP/MPI runtimes reproduced under baseline/ (collected into
+# reproduced_results/fox_<bench>_<variant>/summary.csv).
+COMPETITOR = [
+    {
+        "name": "Cholesky",
+        "comp_csv": BASE / "fox_cholesky_libflame/summary.csv",
+        "comp_label": "libFLAME+BLIS",
+        "comp_metric_col": "mean_gflops",
+        "comp_std_col": "std_gflops",
+        "comp_size_col": "nsize",
+        "comp_config_cols": ["numa"],
+        "tg_idx": 0,
+        "small_size": 6144,
+        "large_size": 33792,
+        "unit": "GFLOPS",
+    },
+    {
+        "name": "Heat",
+        "comp_csv": BASE / "fox_heat_omp/summary.csv",
+        "comp_label": "OpenMP",
+        "comp_metric_col": "mean_throughput",
+        "comp_std_col": "std_throughput",
+        "comp_size_col": "n",
+        "comp_config_cols": ["numa", "procbind"],
+        "tg_idx": 1,
+        "small_size": 12288,
+        "large_size": 49152,
+        "unit": "GCells/s",
+    },
+    {
+        "name": "HPCCG",
+        "comp_csv": BASE / "fox_hpccg_omp/summary.csv",
+        "comp_label": "OpenMP",
+        "comp_metric_col": "mean_mflops",
+        "comp_std_col": "std_mflops",
+        "comp_size_col": ["nx", "ny", "nz"],
+        "comp_config_cols": ["ppn"],
+        "comp_ref_filter": {"ppn": 1},
+        "tg_idx": 2,
+        "small_size": (288, 192, 768),
+        "large_size": (384, 384, 1536),
+        "unit": "MFLOPS",
+    },
+    {
+        "name": "Matmul",
+        "comp_csv": BASE / "fox_mt-dgemm_libomp/summary.csv",
+        "comp_label": "OpenMP+BLIS",
+        "comp_metric_col": "mean_gflops",
+        "comp_std_col": "std_gflops",
+        "comp_size_col": "nsize",
+        "comp_config_cols": ["numa"],
+        "tg_idx": 3,
+        "small_size": 6144,
+        "large_size": 49152,
+        "unit": "GFLOPS",
+    },
+    {
+        "name": "Multisaxpy",
+        "comp_csv": BASE / "fox_multisaxpy_omp/summary.csv",
+        "comp_label": "OpenMP",
+        "comp_metric_col": "mean_gflops",
+        "comp_std_col": "std_gflops",
+        "comp_size_col": "nsize",
+        "comp_config_cols": ["numa", "procbind"],
+        "tg_idx": 4,
+        "small_size": 56524800,
+        "large_size": 771740160,
+        "unit": "GFLOPS",
     },
 ]
 
@@ -508,6 +582,251 @@ def make_main_figure(out_dir: Path):
 
 
 # ---------------------------------------------------------------------------
+# External-baseline (competitor) helpers
+# ---------------------------------------------------------------------------
+
+def _comp_config_label(row, cols):
+    """Short label for a competitor config (for example, N0P1, ×4)."""
+    parts = []
+    for c in cols:
+        val = int(row[c])
+        if c == "ppn":
+            parts.append(f"×{val}")
+        elif c == "numa":
+            parts.append(f"N{val}")
+        elif c == "procbind":
+            parts.append(f"P{val}")
+        else:
+            parts.append(f"{c}={val}")
+    return "".join(parts)
+
+
+def load_comp_configs(comp_cfg, size_val):
+    """Return list of competitor rows: label, metric, std, and config map."""
+    df = load_csv(comp_cfg["comp_csv"])
+    if df is None:
+        return []
+
+    size_col = comp_cfg["comp_size_col"]
+    if isinstance(size_col, list):
+        for c in size_col:
+            df[c] = df[c].astype(int)
+        mask = pd.Series(
+            [tuple(row) == size_val for row in zip(*(df[c] for c in size_col))],
+            index=df.index,
+        )
+    else:
+        mask = df[size_col].astype(int) == size_val
+
+    df_s = df[mask]
+    if "numa" in df_s.columns:
+        df_s = df_s[df_s["numa"].astype(int) == 1]
+    if "procbind" in df_s.columns:
+        df_s = df_s[df_s["procbind"].astype(int) == 1]
+    if df_s.empty:
+        return []
+
+    cfg_cols = comp_cfg.get("comp_config_cols", [])
+    metric_col = comp_cfg["comp_metric_col"]
+    std_col = comp_cfg.get("comp_std_col")
+
+    result = []
+    for _, row in df_s.iterrows():
+        lbl = _comp_config_label(row, cfg_cols) if cfg_cols else "OMP"
+        metric = float(row[metric_col])
+        std = float(row[std_col]) if std_col and std_col in row.index else 0.0
+        cfg = {c: int(row[c]) for c in cfg_cols if c in row.index}
+        result.append({"label": lbl, "metric": metric, "std": std, "cfg": cfg})
+    return result
+
+
+def get_comp_ref_value(comp_cfg, comp_rows):
+    """Reference metric for normalization (default: best competitor)."""
+    if not comp_rows:
+        return None
+
+    ref_filter = comp_cfg.get("comp_ref_filter")
+    if ref_filter:
+        for row in comp_rows:
+            cfg = row.get("cfg", {})
+            if all(cfg.get(k) == v for k, v in ref_filter.items()):
+                return float(row["metric"])
+
+    return max(row["metric"] for row in comp_rows)
+
+
+# ---------------------------------------------------------------------------
+# Figure — main 2x5 normalized to the external (OpenMP/AMD-Math) baseline
+# ---------------------------------------------------------------------------
+
+def make_main_external_baseline_figure(out_dir: Path):
+    print("\n[main-ext] benchmark_comparison_external_baseline")
+    fig, axes = plt.subplots(2, 5, figsize=(16.0, 7.5), constrained_layout=True)
+
+    comp_by_tg_idx = {c["tg_idx"]: c for c in COMPETITOR}
+
+    for col_idx, cfg in enumerate(BENCHMARKS):
+        comp_cfg = comp_by_tg_idx.get(col_idx)
+        df_orig, df_tg, df_init = load_all(cfg)
+
+        for row_idx, (size_val, row_label) in enumerate([
+            (cfg["large_size"], "Large"),
+            (cfg["small_size"], "Small"),
+        ]):
+            ax = axes[row_idx, col_idx]
+
+            orig_s = filter_size(df_orig, size_val)
+            tg_s   = filter_size(df_tg,   size_val)
+            init_s = filter_size(df_init, size_val)
+
+            noinit = cfg.get("noinit_too_slow", False)
+            ref_s = init_s if noinit else orig_s
+
+            tasksizes = get_intersection_tasksizes(ref_s, tg_s)
+            if cfg.get("ts_sort_reverse"):
+                tasksizes = list(reversed(tasksizes))
+
+            if not tasksizes or comp_cfg is None:
+                ax.text(0.5, 0.5, "no data", transform=ax.transAxes,
+                        ha="center", va="center", fontsize=10, color="gray")
+                if row_idx == 0:
+                    ax.set_title(cfg["name"])
+                ax.set_xticks([])
+                ax.set_yticks([])
+                for spine in ax.spines.values():
+                    spine.set_visible(False)
+                continue
+
+            comp_rows = load_comp_configs(comp_cfg, size_val)
+            ref_val = get_comp_ref_value(comp_cfg, comp_rows)
+            if not comp_rows or ref_val is None or ref_val <= 0:
+                ax.text(0.5, 0.5, "no data", transform=ax.transAxes,
+                        ha="center", va="center", fontsize=10, color="gray")
+                if row_idx == 0:
+                    ax.set_title(cfg["name"])
+                ax.set_xticks([])
+                ax.set_yticks([])
+                for spine in ax.spines.values():
+                    spine.set_visible(False)
+                continue
+
+            n_ts = len(tasksizes)
+            x = np.arange(n_ts)
+
+            if noinit:
+                bar_keys = ["init", "tg"]
+            elif init_s is not None:
+                bar_keys = ["orig", "init", "tg"]
+            else:
+                bar_keys = ["orig", "tg"]
+
+            n_bars = len(bar_keys)
+            bar_width = 0.78 / n_bars
+            offsets = np.linspace(-(n_bars - 1) / 2, (n_bars - 1) / 2, n_bars) * bar_width
+
+            colors  = {"orig": COLOR_ORIG, "init": COLOR_INIT, "tg": COLOR_TG}
+            hatches = {"orig": HATCH_ORIG, "init": HATCH_INIT, "tg": HATCH_TG}
+            sources = {"orig": orig_s, "init": init_s, "tg": tg_s}
+
+            max_norm = 1.0
+            unit = cfg.get("unit", "")
+
+            cluster_top = [0.0] * n_ts
+            tg_x_pos   = None
+            tg_norm_vals = None
+            tg_abs_vals  = None
+
+            for b_idx, key in enumerate(bar_keys):
+                x_pos = x + offsets[b_idx]
+                df_bar = sources[key]
+                norm_vals, err_vals, abs_vals = [], [], []
+                for ts in tasksizes:
+                    v, s = get_values(df_bar, ts)
+                    if v is None:
+                        norm_vals.append(0.0)
+                        err_vals.append(0.0)
+                        abs_vals.append(None)
+                    else:
+                        norm_vals.append(v / ref_val)
+                        err_vals.append((s / ref_val) if s else 0.0)
+                        abs_vals.append(v)
+
+                ax.bar(x_pos, norm_vals, bar_width,
+                       yerr=err_vals,
+                       error_kw=dict(elinewidth=0.5, capsize=1.5, capthick=0.5),
+                       color=colors[key], edgecolor="black", linewidth=0.4,
+                       hatch=hatches[key], zorder=3)
+
+                for i, (nv, ev) in enumerate(zip(norm_vals, err_vals)):
+                    cluster_top[i] = max(cluster_top[i], nv + ev)
+                max_norm = max(max_norm, *cluster_top)
+
+                if key == "tg":
+                    tg_x_pos     = x_pos
+                    tg_norm_vals = norm_vals
+                    tg_abs_vals  = abs_vals
+
+            if tg_x_pos is not None:
+                for xp, nv, av, ctop in zip(
+                        tg_x_pos, tg_norm_vals, tg_abs_vals, cluster_top):
+                    if av is None or ref_val <= 0:
+                        continue
+                    speedup = av / ref_val
+                    ax.annotate(rf"${speedup:.2f}\times$",
+                                xy=(xp, ctop),
+                                xytext=(0, 2.5),
+                                textcoords="offset points",
+                                ha="center", va="bottom",
+                                fontsize=14, color="black", zorder=6)
+
+            ymax = max(1.05, max_norm * 1.30)
+            ax.set_ylim(0, ymax)
+
+            # External-runtime reference (line only, no reference bar).
+            ax.axhline(y=1.0, color="gray", linestyle=":", linewidth=1.2, zorder=2)
+
+            if row_idx == 0:
+                ax.set_title(cfg["name"], fontsize=16)
+            ax.set_xticks(x)
+            tick_labels = [_ts_tick_label(cfg, ts) for ts in tasksizes]
+            ax.set_xticklabels(tick_labels, fontsize=12)
+            if row_idx == 1:
+                xlabel = cfg.get("xlabel", "block size")
+                ax.set_xlabel(xlabel, fontsize=14)
+
+            line_text = _fmt_baseline(ref_val, unit, label="$1.0$")
+            if noinit:
+                line_text += "\n(Baseline timed out)"
+            ax.text(0.98, 0.97, line_text,
+                    transform=ax.transAxes,
+                    ha="right", va="top",
+                    fontsize=14, color="dimgray", style="italic", zorder=9)
+
+            if col_idx == 0:
+                ax.set_ylabel(rf"\textbf{{{row_label}}}" if matplotlib.rcParams["text.usetex"] else row_label,
+                              fontsize=16)
+            ax.tick_params(axis="both", which="major", pad=3.0, labelsize=12)
+            ax.grid(True, axis="y", alpha=0.25, linewidth=0.5, zorder=0)
+            ax.set_axisbelow(True)
+
+    fig.supylabel("Speedup", fontsize=16)
+
+    legend_handles = [
+        Patch(facecolor=COLOR_ORIG, hatch=HATCH_ORIG, edgecolor="black", linewidth=0.5, label=LABEL_ORIG),
+        Patch(facecolor=COLOR_INIT, hatch=HATCH_INIT, edgecolor="black", linewidth=0.5, label=LABEL_INIT),
+        Patch(facecolor=COLOR_TG,   hatch=HATCH_TG,   edgecolor="black", linewidth=0.5, label=LABEL_TG),
+        Line2D([0], [0], color="gray", linestyle=":", linewidth=1.4,
+               label=r"AMD-Math / LLVM OpenMP"),
+    ]
+    fig.legend(handles=legend_handles, loc="upper center",
+               ncol=4, bbox_to_anchor=(0.5, 1.10),
+               frameon=False, handlelength=2.2, columnspacing=1.8,
+               fontsize=14)
+
+    save_fig(fig, out_dir, "benchmark_comparison_external_baseline")
+
+
+# ---------------------------------------------------------------------------
 # Figure A — geomean speedup bars
 # ---------------------------------------------------------------------------
 
@@ -850,6 +1169,7 @@ def make_scaling_figure(out_dir: Path):
 
 FIGURES = {
     "main":    make_main_figure,
+    "main_ext": make_main_external_baseline_figure,
     "geomean": make_geomean_figure,
     "geomean_init": make_geomean_init_figure,
     "heatmap": make_heatmap_figure,
