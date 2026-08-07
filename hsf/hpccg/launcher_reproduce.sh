@@ -8,8 +8,8 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+NFS_REPO="$REPO_ROOT"
+export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="HPCCG_mpi_oss-notampi.bin"
 readonly NREPS=3
 readonly PARTITION="${PARTITION:-fox}"
@@ -69,8 +69,7 @@ main() {
     "threads": $cpus, "bsf": 4
 }
 METAEOF
-            local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+            local nfs_raw="$raw_dir"
             echo "  [tg] nx=$nx ny=$ny nz=$nz ntasks=$ntasks cpus=$cpus"
             sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
                 --switches=1 --export=ALL \

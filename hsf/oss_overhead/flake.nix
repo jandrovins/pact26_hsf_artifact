@@ -6,10 +6,10 @@
 	#inputs.bscpkgs.url = "path:/nfs/home/Computational/varcila/bscpkgs";
 	#inputs.nodes_src.url = "path:/nfs/home/Computational/varcila/devshell_tg_apps/nodes";
 	#inputs.nosv_src.url = "path:/nfs/home/Computational/varcila/devshell_tg_apps/nosv";
-	inputs.jungle.url = "git+ssh://git@github.com/jandrovins/jungle.git?ref=tglib";
-	inputs.nodes_src.url = "git+ssh://git@github.com/jandrovins/nodes-haffsched.git";
+	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib";
+	inputs.nodes_src.url = "git+https://github.com/jandrovins/nodes-haffsched.git";
 	inputs.nodes_src.flake = false;
-	#inputs.nosv_src.url = "git+ssh://git@github.com/jandrovins/nos-v-haffsched.git?ref=haffsched-ics&rev=ac69fba1d97ec30942f30f8a02207a243d025b0a";
+	#inputs.nosv_src.url = "git+https://github.com/jandrovins/nos-v-haffsched.git?ref=haffsched-ics&rev=ac69fba1d97ec30942f30f8a02207a243d025b0a";
 	inputs.nosv_src.url = "path:/nvme1/varcila/oss_hsf_overhead/nos-v-haffsched";
 	inputs.nosv_src.flake = false;
 	inputs.ovni_src.url = "path:/nvme1/varcila/ovni";

@@ -14,8 +14,8 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+NFS_REPO="$REPO_ROOT"
+export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="cholesky_libflame.bin"
 readonly NREPS=3
 readonly PARTITION="${PARTITION:-fox}"
@@ -55,8 +55,7 @@ main() {
     "ppn": 1, "cpuspertask": $cpus, "nsize": $n, "numa": $numa
 }
 METAEOF
-            local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+            local nfs_raw="$raw_dir"
             echo "  [cholesky] n=$n cpus=$cpus numa=$numa"
             sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
                 --switches=1 --export=ALL \

@@ -12,7 +12,7 @@ max_iter=$5
 ntasks=$6
 params="$nx $ny $nz $max_iter $ntasks"
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/hsf"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/hpccg"
 
 export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none,scheduler.immediate_successor=false"

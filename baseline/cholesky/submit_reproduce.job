@@ -9,7 +9,7 @@ N=$2
 CPUS=$3
 NUMA=$4
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/baseline"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/cholesky"
 
 echo "=== Cholesky baseline: N=$N CPUS=$CPUS NUMA=$NUMA ==="

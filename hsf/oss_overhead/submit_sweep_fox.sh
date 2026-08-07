@@ -8,7 +8,7 @@
 #SBATCH --output=%x_%j.out
 #SBATCH --error=%x_%j.err
 
-FLAKE_DIR=/nfs/home/Computational/varcila/pact_consolidated/nosvorig
-SCRIPT_DIR=/nfs/home/Computational/varcila/pact_consolidated/nosvorig/oss_overhead
+SCRIPT_DIR="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "$0")" && pwd)}"
+FLAKE_DIR="$(dirname "$SCRIPT_DIR")"
 
 nix develop --impure "$FLAKE_DIR" --command bash -c "cd '$SCRIPT_DIR' && ./run_sweep.sh"

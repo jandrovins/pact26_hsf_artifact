@@ -10,8 +10,8 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+NFS_REPO="$REPO_ROOT"
+export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="multisaxpy_smp"
 readonly NREPS=3
 readonly PARTITION="${PARTITION:-fox}"
@@ -55,8 +55,7 @@ main() {
     "numa": $numa, "procbind": $procbind
 }
 METAEOF
-                local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+                local nfs_raw="$raw_dir"
                 echo "  [multisaxpy] n=$n its=$its numa=$numa procbind=$procbind"
                 sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
                     --switches=1 --export=ALL \

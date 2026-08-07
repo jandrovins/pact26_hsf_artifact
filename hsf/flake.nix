@@ -1,8 +1,8 @@
 {
-	inputs.jungle.url = "git+ssh://git@github.com/jandrovins/jungle.git?ref=tglib";
-	inputs.nodes_src.url = "git+ssh://git@github.com/jandrovins/nodes-haffsched.git";
+	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib&rev=bb3e589d3458fe1983e8284af882af786572de15";
+	inputs.nodes_src.url = "git+https://github.com/jandrovins/nodes-haffsched.git";
 	inputs.nodes_src.flake = false;
-	inputs.nosv_src.url = "git+ssh://git@github.com/jandrovins/nos-v-haffsched.git?ref=hwc-perf-analysis&rev=f6c19c404b0d1b042a79492479259af195b375ef";
+	inputs.nosv_src.url = "git+https://github.com/jandrovins/nos-v-haffsched.git?ref=hwc-perf-analysis&rev=f6c19c404b0d1b042a79492479259af195b375ef";
 	inputs.nosv_src.flake = false;
 
 	outputs = { self, jungle, nodes_src, nosv_src}:

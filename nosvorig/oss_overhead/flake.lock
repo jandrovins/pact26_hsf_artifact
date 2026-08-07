@@ -11,12 +11,12 @@
         "rev": "dfc4fd0dc5054d2483c027b715bee3a7cff90b20",
         "revCount": 1536,
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/jungle.git"
+        "url": "https://github.com/jandrovins/jungle.git"
       },
       "original": {
         "ref": "tglib",
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/jungle.git"
+        "url": "https://github.com/jandrovins/jungle.git"
       }
     },
     "nixpkgs": {
@@ -44,11 +44,11 @@
         "rev": "f090fc5c383aea0c4aa1e0c58cfb7836d2a42005",
         "revCount": 210,
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/nodes-haffsched.git"
+        "url": "https://github.com/jandrovins/nodes-haffsched.git"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/nodes-haffsched.git"
+        "url": "https://github.com/jandrovins/nodes-haffsched.git"
       }
     },
     "nosv_src": {

@@ -11,7 +11,7 @@ CPUS=$4
 NUMA=$5
 PROCBIND=$6
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/baseline"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/multisaxpy"
 
 echo "=== Multisaxpy baseline: N=$N ITS=$ITS CPUS=$CPUS NUMA=$NUMA PROCBIND=$PROCBIND ==="

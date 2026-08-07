@@ -8,8 +8,8 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+NFS_REPO="$REPO_ROOT"
+export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="02.heat_ompss2_prio.bin"
 readonly NREPS=3
 readonly PARTITION="${PARTITION:-fox}"
@@ -70,8 +70,7 @@ run_variant() {
     "imm": "true", "mmap": 1, "prio": 1, "numa": "${numa_val}"
 }
 METAEOF
-            local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+            local nfs_raw="$raw_dir"
             echo "  [$variant] n=$n bs=$bs its=$its numa=$numa_val"
             sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
                 --switches=1 --export=ALL \

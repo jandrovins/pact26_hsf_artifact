@@ -16,6 +16,8 @@ for launcher in \
     hsf/hpccg/launcher_reproduce.sh \
     hsf/matmul/launcher_reproduce.sh \
     hsf/multisaxpy/launcher_reproduce.sh \
+    nosvorig/oss_overhead/launcher_reproduce.sh \
+    hsf/oss_overhead/launcher_reproduce.sh \
     baseline/cholesky/launcher_reproduce.sh \
     baseline/heat/launcher_reproduce.sh \
     baseline/hpccg/launcher_reproduce.sh \

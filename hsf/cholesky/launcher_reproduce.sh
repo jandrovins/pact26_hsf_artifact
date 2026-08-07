@@ -9,8 +9,8 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+NFS_REPO="$REPO_ROOT"
+export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="cholesky_oss.bin"
 readonly NREPS=3
 readonly PARTITION="${PARTITION:-fox}"
@@ -64,8 +64,7 @@ run_config() {
     "imm": "false", "ppn": 1, "mmap": 1
 }
 METAEOF
-    local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+    local nfs_raw="$raw_dir"
     echo "  [tg] N=$nsize TS=$ts lower=$lower upper=$upper flex=$affflex"
     sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
         --switches=1 --export=ALL \

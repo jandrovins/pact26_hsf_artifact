@@ -11,7 +11,7 @@ ITS=$4
 WARMUP=$5
 CPUS=$6
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/nosvorig"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/heat"
 
 WARMUP_FLAG=""

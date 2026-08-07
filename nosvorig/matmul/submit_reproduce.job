@@ -12,7 +12,7 @@ TS=$5
 WARMUP=1
 params="$N $M $ITS $TS $WARMUP"
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/nosvorig"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/matmul"
 
 export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"
