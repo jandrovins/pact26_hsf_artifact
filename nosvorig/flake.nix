@@ -1,6 +1,4 @@
 {
-	#inputs.nodes_src.url = "path:/nfs/home/Computational/varcila/devshell_tg_apps/nodes";
-	#inputs.nosv_src.url = "path:/nfs/home/Computational/varcila/devshell_tg_apps/nosv";
 	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib&rev=bb3e589d3458fe1983e8284af882af786572de15";
 	inputs.nodes_src.url = "https://github.com/bsc-pm/nodes/releases/download/version-1.4/nodes-1.4.0.tar.gz";
 	inputs.nodes_src.flake = false;

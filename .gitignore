@@ -1,0 +1,36 @@
+# Nix / direnv local caches
+.direnv/
+.envrc
+result
+result-*
+
+# Compiled benchmark binaries and objects
+*.o
+*.bin
+overhead_oss
+overhead_omp
+overhead_oss_taskloop
+overhead_omp_taskloop
+overhead_omp_gcc_taskloop
+overhead_omp_gcc
+overhead_oss_tg
+overhead_oss_tg_taskloop
+overhead_oss_tggrp
+overhead_oss_tggrp_taskloop
+measure_work
+
+# SLURM job output written into the result trees (keep the .gitkeep skeleton)
+reproduced_results/**/raw/**/job*.out
+reproduced_results/**/raw/**/job*.err
+reproduced_results/**/raw/**/exp_meta.json
+oss_overhead/results/
+
+# oss_overhead sweep outputs
+*/oss_overhead/results/
+
+# Paper PDF is submitted separately, not part of the code artifact
+*.pdf
+
+# Editor / OS cruft
+*~
+.DS_Store

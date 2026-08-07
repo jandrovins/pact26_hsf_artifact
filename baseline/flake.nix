@@ -1,9 +1,5 @@
 {
 	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib";
-	#inputs.libflame = {
-	#	url = "git+file:///nfs/home/Computational/varcila/baseline_without_ompss2/libflame";
-	#	flake = false;
-	#};
 	outputs = { self, jungle }:
 	let
 	# Target architecture. Defaults to a portable build; set HSF_ARCH=znver4 on
