@@ -11,7 +11,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 NFS_REPO="$REPO_ROOT"
 export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="b6_multisaxpy_nodes"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 
 # HSF configs: "N:TS:ITERATIONS:CPUS:LOWER:POLICY:LABEL"

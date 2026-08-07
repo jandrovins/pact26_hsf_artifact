@@ -12,7 +12,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 NFS_REPO="$REPO_ROOT"
 export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="cholesky_oss.bin"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 
 # HSF configs from original results:

@@ -11,7 +11,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 NFS_REPO="$REPO_ROOT"
 export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="HPCCG_mpi_oss-notampi.bin"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 
 # HSF configs: "NX:NY:NZ:NTASKS_LIST:MAXIT:CPUS"

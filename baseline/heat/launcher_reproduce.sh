@@ -13,7 +13,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 NFS_REPO="$REPO_ROOT"
 export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="heat_omp.bin"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 readonly RESULT_DIR="${REPO_ROOT}/reproduced_results/fox_heat_omp"
 

@@ -11,7 +11,7 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 NFS_REPO="$REPO_ROOT"
 export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
 readonly BIN="02.matmul_ompss2_itampi.bin"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 
 # Configs: "NSIZE:MSIZE:TS_LIST:ITS:CPUS"
