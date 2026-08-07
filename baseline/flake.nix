@@ -6,12 +6,20 @@
 	#};
 	outputs = { self, jungle }:
 	let
+	# Target architecture. Defaults to a portable build; set HSF_ARCH=znver4 on
+	# the paper's AMD EPYC 9684X (Genoa-X) machine for the faithful external
+	# baseline. (Read impurely; invocations use `nix develop --impure`.)
+	hsfArch = let e = builtins.getEnv "HSF_ARCH"; in if e == "" then "native" else e;
+	isZen4 = hsfArch == "znver4";
+	archCflags = if isZen4 then import ./fox_cflags.nix
+		else "-march=${hsfArch} -mtune=${hsfArch}";
     blisOverlay = (final: prev: {
 
-      # Build blis for Fox architecture and without OpenMP
+      # Build blis with OpenMP; zen4 kernels only for the faithful
+      # HSF_ARCH=znver4 build, otherwise a portable generic BLIS.
       amd-blis = (prev.amd-blis.override {
         withOpenMP = true;
-        withArchitecture = "zen4";
+        withArchitecture = if isZen4 then "zen4" else "generic";
       }).overrideAttrs (old: {
 	#configureFlags =  [ "--enable-debug" ] ++ (old.configureFlags or [ ]);
 	dontStrip = true;
@@ -32,8 +40,7 @@
 					"-DAOCL_BLAS_LIB=${final.amd-blis}/lib/libblis-mt.so"
 					"-DAOCL_BLAS_INCLUDE_DIR=${final.amd-blis}/include/blis"
 					"-DENABLE_SET_LIB_VERSION=\"5.1.0Build\""
-					"-DLF_ISA_CONFIG=avx512"
-				];
+				] ++ (if isZen4 then [ "-DLF_ISA_CONFIG=avx512" ] else [ ]);
 				env = (old.env or {}) // { NIX_CFLAGS_COMPILE = ((old.env or {}).NIX_CFLAGS_COMPILE or (old.NIX_CFLAGS_COMPILE or "")) + " -DBLIS_DISABLE_CBLAS"; };
 				NIX_LDFLAGS = (old.NIX_LDFLAGS or "") + " -L${final.amd-blis}/lib -lblis-mt -rpath ${final.amd-blis}/lib";
 				dontStrip = true;
@@ -42,9 +49,9 @@
         });
 
 
-	foxCflags = { 
-			CFLAGS = import ./fox_cflags.nix;
-			CXXFLAGS = import ./fox_cflags.nix;
+	foxCflags = {
+			CFLAGS = archCflags;
+			CXXFLAGS = archCflags;
 		};
 
 	pkgs = import jungle.inputs.nixpkgs {

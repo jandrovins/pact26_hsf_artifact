@@ -1,3 +1,5 @@
+# Target arch: defaults to native; the pipeline exports HSF_ARCH=znver4 on Genoa-X.
+HSF_ARCH ?= native
 CC=clang
 MCC=clang
 MPICC=mpicc
@@ -32,7 +34,7 @@ TARGET_BASE=cholesky
 
 # Target the Fox AMD EPYC 9684X (Genoa-X = znver4) explicitly so the binary is
 # correct regardless of the build host (e.g. when built off-cluster).
-CFLAGS=-D_GNU_SOURCE -O3 -g -ffast-math -march=znver4 -mtune=znver4
+CFLAGS=-D_GNU_SOURCE -O3 -g -ffast-math -march=$(HSF_ARCH) -mtune=$(HSF_ARCH)
 
 LIB_PATHS=$(SYS_LIB) $(BLAS_LIB) $(LIBFLAME_LIB)
 

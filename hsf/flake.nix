@@ -7,12 +7,32 @@
 
 	outputs = { self, jungle, nodes_src, nosv_src}:
 	let
+	# Target architecture for compiled code. Defaults to a portable "native"
+	# build so the artifact is Functional on any host; set HSF_ARCH=znver4 on
+	# the paper's AMD EPYC 9684X (Genoa-X) machine for faithful reproduction.
+	# (Read impurely; all invocations use `nix develop --impure`.)
+	hsfArch = let e = builtins.getEnv "HSF_ARCH"; in if e == "" then "native" else e;
+	isZen4 = hsfArch == "znver4";
+	archCflags = if isZen4 then import ./fox_cflags.nix
+		else "-march=${hsfArch} -mtune=${hsfArch}";
+
+	# tglib from the author's public GitHub over HTTPS (jungle's default gitUrl
+	# is SSH). Applied as an overlay so both buildInputs and TGLIB_HOME use it.
+	tglibOverlay = final: prev: {
+		tglib = prev.tglib.override {
+			gitUrl = "https://github.com/jandrovins/tglib.git";
+			gitBranch = "main";
+			gitCommit = "d78d0a4463385344e07ef265881a670ceda04823";
+		};
+	};
+
     blisOverlay = (final: prev: {
 
-      # Build blis for Fox architecture and without OpenMP
+      # Build blis without OpenMP; use zen4 kernels only for the faithful
+      # HSF_ARCH=znver4 build, otherwise a portable generic BLIS.
       amd-blis = (prev.amd-blis.override {
         withOpenMP = false;
-        withArchitecture = "zen4";
+        withArchitecture = if isZen4 then "zen4" else "generic";
       }).overrideAttrs (old: {
         hardeningDisable = [ "all" ];
       });
@@ -42,7 +62,7 @@
 	llvmOmpssAffinityBranchOverlay = final: prev: {
 		clangOmpss2Unwrapped = (prev.clangOmpss2Unwrapped.override {
 			useGit = true;
-			gitUrl = "git@bscpm04.bsc.es:varcila/llvm-mono.git";
+			gitUrl = "https://github.com/jandrovins/llvm-mono-ompss2.git";
 			gitBranch = "affinity_2";
 			gitCommit = "3340e46386495e73cd21c83f6ec44b6dcf0739ad";
 		});
@@ -56,34 +76,10 @@
 		);
 	};
 
-		foxCflags = let
-						# try environment variable first
-						hostEnvTry = builtins.tryEval (builtins.getEnv "HOSTNAME");
-						hostEnv = if hostEnvTry.success then hostEnvTry.value else "";
-
-						# fallback to /etc/hostname when env is empty
-						hostFileTry = builtins.tryEval (builtins.readFile "/etc/hostname");
-						hostFileRaw = if hostFileTry.success then hostFileTry.value else "";
-						# strip newlines/carriage returns
-						hostFile = builtins.replaceStrings ["\n" "\r"] ["" ""] hostFileRaw;
-
-						# choose host and record source
-						host = if hostEnv != "" then hostEnv else hostFile;
-						source = if hostEnv != "" then "env" else if hostFile != "" then "/etc/hostname" else "none";
-
-						# determine whether to use fox cflags (empty host counts as use)
-						useFoxVal = host == "" || (builtins.match ".*[Ff][Oo][Xx].*" host != null);
-
-						useFox = builtins.trace (
-							if useFoxVal
-							then "Using fox_cflags (source='" + source + "', HOSTNAME='" + host + "')"
-							else "Not using fox_cflags (source='" + source + "', HOSTNAME='" + host + "')"
-						) useFoxVal;
-				in
-				if useFox then {
-						CFLAGS = import ./fox_cflags.nix;
-						CXXFLAGS = import ./fox_cflags.nix;
-				} else { };
+		foxCflags = {
+					CFLAGS = archCflags;
+					CXXFLAGS = archCflags;
+			};
 	nosvAffinityOverlay = final: prev: {
 		nosv = (prev.nosv.overrideAttrs (old: {
 			useGit = false;
@@ -124,6 +120,7 @@
 				#mpichDebugOverlay
 				ovniOverlay
 				blisOverlay
+				tglibOverlay
 			];
 			config.allowUnfree = true;
 		};
@@ -163,9 +160,7 @@
 				pkg-config
 				hwloc
 				linuxKernel.packages.linux_zen.turbostat
-				( tglib.override {
-					gitCommit = "d78d0a4463385344e07ef265881a670ceda04823";
-				} )
+				tglib
 				mpi
 				amd-blis
 				amd-libflame

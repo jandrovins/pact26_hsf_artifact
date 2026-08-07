@@ -9,6 +9,14 @@
 
 	outputs = { self, jungle, nodes_src, nosv_src}:
 	let
+	# Target architecture for compiled code. Defaults to a portable "native"
+	# build so the artifact is Functional on any host; set HSF_ARCH=znver4 on
+	# the paper's AMD EPYC 9684X (Genoa-X) machine for faithful reproduction.
+	# (Read impurely; all invocations use `nix develop --impure`.)
+	hsfArch = let e = builtins.getEnv "HSF_ARCH"; in if e == "" then "native" else e;
+	isZen4 = hsfArch == "znver4";
+	archCflags = if isZen4 then import ./fox_cflags.nix
+		else "-march=${hsfArch} -mtune=${hsfArch}";
 	ovniOverlay = final: prev: {
       # Replace ovni by the latest release from git in all packages.
       ovni = (prev.ovni.override {
@@ -23,10 +31,11 @@
     };
     blisOverlay = (final: prev: {
 
-      # Build blis for Fox architecture and without OpenMP
+      # Build blis without OpenMP; use zen4 kernels only for the faithful
+      # HSF_ARCH=znver4 build, otherwise a portable generic BLIS.
       amd-blis = (prev.amd-blis.override {
         withOpenMP = false;
-        withArchitecture = "zen4";
+        withArchitecture = if isZen4 then "zen4" else "generic";
       }).overrideAttrs (old: {
         hardeningDisable = [ "all" ];
       });
@@ -43,7 +52,7 @@
 	llvmOmpssAffinityBranchOverlay = final: prev: {
 		clangOmpss2Unwrapped = (prev.clangOmpss2Unwrapped.override {
 			useGit = true;
-			gitUrl = "git@bscpm04.bsc.es:varcila/llvm-mono.git";
+			gitUrl = "https://github.com/jandrovins/llvm-mono-ompss2.git";
 			gitBranch = "affinity_2";
 			gitCommit = "3340e46386495e73cd21c83f6ec44b6dcf0739ad";
 		});
@@ -57,9 +66,9 @@
 		);
 	};
 
-	foxCflags = { 
-			CFLAGS = import ./fox_cflags.nix;
-			CXXFLAGS = import ./fox_cflags.nix;
+	foxCflags = {
+			CFLAGS = archCflags;
+			CXXFLAGS = archCflags;
 		};
 	nosvAffinityOverlay = final: prev: {
 		nosv = (prev.nosv.overrideAttrs (old: {

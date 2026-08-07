@@ -1,3 +1,5 @@
+# Target arch: defaults to native; the pipeline exports HSF_ARCH=znver4 on Genoa-X.
+HSF_ARCH ?= native
 # Compilers
 CC=clang
 
@@ -5,7 +7,7 @@ CC=clang
 CPPFLAGS=-DSIMD -DBENCH6_NAME='"heat_omp"'
 
 # Compiler flags
-CFLAGS=-march=znver4 -mtune=znver4 -O3 -ffast-math -std=gnu11 -g3 -fopenmp-simd
+CFLAGS=-march=$(HSF_ARCH) -mtune=$(HSF_ARCH) -O3 -ffast-math -std=gnu11 -g3 -fopenmp-simd
 
 # Kernel flags (SIMD vectorization analysis)
 KFLAGS=$(CFLAGS) -Rpass-analysis=loop-vectorize
