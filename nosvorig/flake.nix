@@ -52,7 +52,10 @@
 			useGit = true;
 			gitUrl = "https://github.com/jandrovins/llvm-mono-ompss2.git";
 			gitBranch = "affinity_2";
-			gitCommit = "3340e46386495e73cd21c83f6ec44b6dcf0739ad";
+			# Squashed snapshot of the bscpm04 affinity_2 tip 3340e46 (same source
+			# tree, no history, so it fits GitHub's push limit). Tree-identical, so
+			# the built clangOmpss2 is byte-for-byte the same.
+			gitCommit = "a094198c7ca7fc2414c486010f49b8f77eae5e8b";
 		});
 	};
 
