@@ -34,3 +34,6 @@ oss_overhead/results/
 # Editor / OS cruft
 *~
 .DS_Store
+
+# Agent working notes (local only, not part of the artifact)
+AGENTS.md
