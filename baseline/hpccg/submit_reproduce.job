@@ -13,7 +13,7 @@ PPN=$6
 CPUS=$7
 NUMA=$8
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/baseline"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/hpccg"
 
 echo "=== HPCCG baseline: nx=$NX ny=$NY nzlocal=$NZLOCAL maxit=$MAXIT ppn=$PPN cpus=$CPUS numa=$NUMA ==="

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# =============================================================================
+# submit_reproduce.job — SLURM batch script for the oss_overhead sweep.
+# Builds the microbenchmarks then runs run_sweep.sh (NRUNS=5) in the flake shell.
+# Relocatable: REPRO_BASE_ROOT is exported by launcher_reproduce.sh.
+# =============================================================================
+set -euo pipefail
+
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
+SWEEP_DIR="$BASE_ROOT/oss_overhead"
+
+echo "[TIMING] before nix develop: $(date +%T.%N)"
+nix develop --impure "$BASE_ROOT" --command bash -c "
+    set -e
+    echo \"[TIMING] inside nix shell: \$(date +%T.%N)\"
+    cd '$SWEEP_DIR'
+    # Build clang (OmpSs-2/OpenMP) targets; gcc-only targets are skipped by
+    # run_sweep.sh if the toolchain lacks gcc.
+    make -k all || true
+    echo \"[TIMING] after build: \$(date +%T.%N)\"
+    ./run_sweep.sh
+    echo \"[TIMING] after sweep: \$(date +%T.%N)\"
+"
+echo "[TIMING] after nix develop exit: $(date +%T.%N)"

@@ -12,7 +12,7 @@ CPUS=$5
 NUMA=$6
 PROCBIND=$7
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/baseline"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/heat"
 
 echo "=== Heat baseline: N=$N BS=$BS ITS=$ITS NUMA=$NUMA PROCBIND=$PROCBIND ==="

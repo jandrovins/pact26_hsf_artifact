@@ -1,3 +1,5 @@
+# Target arch: defaults to native; the pipeline exports HSF_ARCH=znver4 on Genoa-X.
+HSF_ARCH ?= native
 
 CC=clang
 
@@ -7,7 +9,7 @@ BLAS_FLAGS=-DUSE_BLIS -I$(BLIS_HOME)/include/blis
 
 # -D_GNU_SOURCE exposes CPU_ZERO/CPU_ISSET/sched_getaffinity (sched.h) used by
 # the USE_NUMA_INTERLEAVE affinity code.
-CFLAGS=-ffast-math -march=znver4 -mtune=znver4 -O3 -fopenmp -D_GNU_SOURCE -DUSE_CBLAS $(BLAS_FLAGS)
+CFLAGS=-ffast-math -march=$(HSF_ARCH) -mtune=$(HSF_ARCH) -O3 -fopenmp -D_GNU_SOURCE -DUSE_CBLAS $(BLAS_FLAGS)
 LDFLAGS=$(BLAS_LIB)
 
 NUMA_FLAGS=-DUSE_NUMA_INTERLEAVE -lnuma

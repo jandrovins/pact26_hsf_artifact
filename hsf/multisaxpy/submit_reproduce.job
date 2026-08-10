@@ -9,7 +9,7 @@ N=$2
 TS=$3
 iterations=$4
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/hsf"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/multisaxpy"
 
 export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"

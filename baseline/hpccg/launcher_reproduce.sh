@@ -13,10 +13,17 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+# Map login /home paths to the /nfs/home mirror the compute nodes see (e.g. Fox);
+# no-op where login and compute paths already match (portable on other clusters).
+if [ "${REPO_ROOT#/home/}" != "$REPO_ROOT" ] && [ -d "/nfs${REPO_ROOT}" ]; then
+	nfsmap(){ printf '/nfs%s' "$1"; }
+else
+	nfsmap(){ printf '%s' "$1"; }
+fi
+NFS_REPO="$(nfsmap "$REPO_ROOT")"
+export REPRO_BASE_ROOT="$(nfsmap "$(dirname "$SCRIPT_DIR")")"
 readonly BIN="test_HPCCG"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 readonly RESULT_DIR="${REPO_ROOT}/reproduced_results/fox_hpccg_omp"
 readonly NUMA=1
@@ -60,8 +67,7 @@ main() {
     "nzlocal": $nzlocal, "numa": $NUMA
 }
 METAEOF
-            local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+            local nfs_raw="$(nfsmap "$raw_dir")"
             echo "  [hpccg] ppn=$ppn nx=$nx ny=$ny nz=$nz (nzlocal=$nzlocal) maxit=$maxit cpus=$cpus"
             sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
                 --switches=1 --export=ALL \

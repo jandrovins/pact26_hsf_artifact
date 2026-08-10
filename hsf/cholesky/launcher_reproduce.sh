@@ -9,10 +9,17 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+# Map login /home paths to the /nfs/home mirror the compute nodes see (e.g. Fox);
+# no-op where login and compute paths already match (portable on other clusters).
+if [ "${REPO_ROOT#/home/}" != "$REPO_ROOT" ] && [ -d "/nfs${REPO_ROOT}" ]; then
+	nfsmap(){ printf '/nfs%s' "$1"; }
+else
+	nfsmap(){ printf '%s' "$1"; }
+fi
+NFS_REPO="$(nfsmap "$REPO_ROOT")"
+export REPRO_BASE_ROOT="$(nfsmap "$(dirname "$SCRIPT_DIR")")"
 readonly BIN="cholesky_oss.bin"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 
 # HSF configs from original results:
@@ -46,7 +53,14 @@ run_config() {
     export VVV_AFF_FLEXIBLE=$affflex
     export VVV_MMAP_ENABLED=1
     export VVV_PRIORITY_ENABLED=1
-    export VVV_CHOL_GEMM_TILES_PER_BLOCK=48
+    # L3-matched: keep each GEMM batch's output working set ~96 MiB (Genoa-X CCD
+    # L3) instead of a fixed 48 (which only matches L3 at TS=512).
+    # gemmtpb = (96 MiB / 8 bytes) / TS^2 = 12582912 / TS^2.
+    export VVV_CHOL_GEMM_TILES_PER_BLOCK=$(( 12582912 / (ts * ts) ))
+    # GEMM taskgroup blocking is OFF by default: GEMMs use the column round-robin
+    # taskgroups (like potrf/trsm/syrk). Set VVV_CHOL_GEMM_TG=1 to opt into the
+    # separate FIFO GEMM pool (which then uses the gemmtpb value above).
+    export VVV_CHOL_GEMM_TG="${VVV_CHOL_GEMM_TG:-0}"
     export NOSV_CONFIG=nosv.toml
     export NOSV_CONFIG_OVERRIDE="topology.binding=inherit,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
 
@@ -60,12 +74,11 @@ run_config() {
     "experiment": "${VVV_EXP_STR}",
     "N": $nsize, "TS": $ts,
     "lower": "$lower", "upper": "$upper", "affflex": $affflex,
-    "useprio": 1, "gemmtpb": 48, "tgenabled": 1,
+    "useprio": 1, "gemmtpb": ${VVV_CHOL_GEMM_TILES_PER_BLOCK}, "tgenabled": 1,
     "imm": "false", "ppn": 1, "mmap": 1
 }
 METAEOF
-    local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+    local nfs_raw="$(nfsmap "$raw_dir")"
     echo "  [tg] N=$nsize TS=$ts lower=$lower upper=$upper flex=$affflex"
     sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
         --switches=1 --export=ALL \

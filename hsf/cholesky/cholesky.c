@@ -51,6 +51,9 @@ static nosv_task_group_t *gemm_tg_pool = NULL;
 static long gemm_pool_size = 0;
 static long gemm_tiles_per_block = 48; // Default: 48 tiles per batch (fits ~96 MiB at TS=512)
 static long gemm_counter = 0;         // Per-iteration counter, reset at each k
+// Default OFF: GEMMs use the column round-robin taskgroups (like potrf/trsm/syrk).
+// Set VVV_CHOL_GEMM_TG=1 to opt into the separate FIFO GEMM-blocking pool.
+static int gemm_tg_enabled = 0;
 
 //static void cholesky_init_taskgroups(void)
 //{
@@ -103,6 +106,16 @@ static nosv_topo_level_t chol_string_to_topo_level(const char *s)
 
 static void cholesky_init_gemm_pool(void)
 {
+	/* GEMM blocking is opt-in. By default GEMMs use the column round-robin TGs. */
+	const char *env_gtg = getenv("VVV_CHOL_GEMM_TG");
+	gemm_tg_enabled = (env_gtg && strcmp(env_gtg, "1") == 0) ? 1 : 0;
+	if (!gemm_tg_enabled) {
+		printf("=== GEMM TG Pool: DISABLED (VVV_CHOL_GEMM_TG!=1) ===\n");
+		printf("  GEMMs use the column round-robin taskgroups (by output column).\n");
+		printf("====================\n");
+		return;
+	}
+
 	/* Read tiles-per-block from environment */
 	const char *env_tpb = getenv("VVV_CHOL_GEMM_TILES_PER_BLOCK");
 	if (env_tpb) {
@@ -248,6 +261,16 @@ static inline nosv_task_group_t cholesky_get_gemm_taskgroup(void)
 	return gemm_tg_pool[tg_idx];
 }
 
+/* GEMM taskgroup selector: the separate FIFO pool when opted in
+ * (VVV_CHOL_GEMM_TG=1), otherwise the default column round-robin (by output
+ * column j), so GEMMs are scheduled like potrf/trsm/syrk. */
+static inline nosv_task_group_t cholesky_gemm_tg(long i, long j)
+{
+	if (gemm_tg_enabled)
+		return cholesky_get_gemm_taskgroup();
+	return cholesky_get_taskgroup(i, j);
+}
+
 static int check_gemm_prio_overflow(long N, long TS)
 {
 	long nblocks = N / TS;
@@ -342,8 +365,8 @@ static void cholesky(long N, long TS, double (*A)[N/TS][TS][TS], int use_priorit
 		
 		for (long i = k+1; i < N/TS; i++) {
 			for (long j = k+1; j < i; j++) {
-				/* Gemm uses separate FIFO TG pool — no priority (FIFO preserves creation order) */
-				#pragma oss task taskgroup(cholesky_get_gemm_taskgroup()) in(A[i][k], A[j][k]) inout(A[i][j]) label("gemm")
+				/* GEMM taskgroup: column round-robin by default, FIFO pool if opted in */
+				#pragma oss task taskgroup(cholesky_gemm_tg(i, j)) in(A[i][k], A[j][k]) inout(A[i][j]) label("gemm")
 				{
 					if (ovni_enabled) {
 						ovni_mark_push(ROW_TYPE, i+1);

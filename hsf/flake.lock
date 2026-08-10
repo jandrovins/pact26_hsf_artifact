@@ -11,12 +11,13 @@
         "rev": "bb3e589d3458fe1983e8284af882af786572de15",
         "revCount": 1535,
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/jungle.git"
+        "url": "https://github.com/jandrovins/jungle.git"
       },
       "original": {
         "ref": "tglib",
+        "rev": "bb3e589d3458fe1983e8284af882af786572de15",
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/jungle.git"
+        "url": "https://github.com/jandrovins/jungle.git"
       }
     },
     "nixpkgs": {
@@ -44,11 +45,11 @@
         "rev": "f090fc5c383aea0c4aa1e0c58cfb7836d2a42005",
         "revCount": 210,
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/nodes-haffsched.git"
+        "url": "https://github.com/jandrovins/nodes-haffsched.git"
       },
       "original": {
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/nodes-haffsched.git"
+        "url": "https://github.com/jandrovins/nodes-haffsched.git"
       }
     },
     "nosv_src": {
@@ -60,13 +61,13 @@
         "rev": "f6c19c404b0d1b042a79492479259af195b375ef",
         "revCount": 946,
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/nos-v-haffsched.git"
+        "url": "https://github.com/jandrovins/nos-v-haffsched.git"
       },
       "original": {
         "ref": "hwc-perf-analysis",
         "rev": "f6c19c404b0d1b042a79492479259af195b375ef",
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/nos-v-haffsched.git"
+        "url": "https://github.com/jandrovins/nos-v-haffsched.git"
       }
     },
     "root": {

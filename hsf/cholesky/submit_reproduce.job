@@ -9,7 +9,7 @@ nsize=$2
 ts=$3
 params="$nsize $ts 1"
 
-BASE_ROOT="/nfs/home/Computational/varcila/pact_consolidated/hsf"
+BASE_ROOT="${REPRO_BASE_ROOT:?REPRO_BASE_ROOT not set; submit via launcher_reproduce.sh}"
 BENCH_DIR="$BASE_ROOT/cholesky"
 
 export NOSV_CONFIG_OVERRIDE="${NOSV_CONFIG_OVERRIDE},instrumentation.version=none"

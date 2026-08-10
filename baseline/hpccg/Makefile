@@ -1,3 +1,5 @@
+# Target arch: defaults to native; the pipeline exports HSF_ARCH=znver4 on Genoa-X.
+HSF_ARCH ?= native
 
 # @HEADER
 # ***********************************************************************
@@ -78,7 +80,7 @@ USE_MPI = -DUSING_MPI
 
 #IA32 with GCC: 
 #CPP_OPT_FLAGS = -O3 -funroll-all-loops -malign-double
-CPP_OPT_FLAGS = -O3 -ffast-math -march=znver4 -mtune=znver4
+CPP_OPT_FLAGS = -O3 -ffast-math -march=$(HSF_ARCH) -mtune=$(HSF_ARCH)
 
 #
 # 4) MPI library:

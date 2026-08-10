@@ -8,10 +8,17 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+# Map login /home paths to the /nfs/home mirror the compute nodes see (e.g. Fox);
+# no-op where login and compute paths already match (portable on other clusters).
+if [ "${REPO_ROOT#/home/}" != "$REPO_ROOT" ] && [ -d "/nfs${REPO_ROOT}" ]; then
+	nfsmap(){ printf '/nfs%s' "$1"; }
+else
+	nfsmap(){ printf '%s' "$1"; }
+fi
+NFS_REPO="$(nfsmap "$REPO_ROOT")"
+export REPRO_BASE_ROOT="$(nfsmap "$(dirname "$SCRIPT_DIR")")"
 readonly BIN="02.heat_ompss2.bin"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 readonly WARMUP=1
 
@@ -71,8 +78,7 @@ main() {
     "lower": "$lower", "upper": "$upper", "flex": $flex, "policy": "PRIO"
 }
 METAEOF
-        local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+        local nfs_raw="$(nfsmap "$raw_dir")"
         echo "  [tg] n=$n bs=$bs lower=$lower upper=$upper flex=$flex"
         sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
             --switches=1 --export=ALL \

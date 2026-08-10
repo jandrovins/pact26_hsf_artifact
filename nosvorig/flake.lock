@@ -11,12 +11,13 @@
         "rev": "bb3e589d3458fe1983e8284af882af786572de15",
         "revCount": 1535,
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/jungle.git"
+        "url": "https://github.com/jandrovins/jungle.git"
       },
       "original": {
         "ref": "tglib",
+        "rev": "bb3e589d3458fe1983e8284af882af786572de15",
         "type": "git",
-        "url": "ssh://git@github.com/jandrovins/jungle.git"
+        "url": "https://github.com/jandrovins/jungle.git"
       }
     },
     "nixpkgs": {

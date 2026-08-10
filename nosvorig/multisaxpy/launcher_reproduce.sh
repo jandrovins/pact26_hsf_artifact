@@ -9,10 +9,17 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$(echo "$REPO_ROOT" | sed 's|^/home/|/nfs/home/|')"
-
+# Map login /home paths to the /nfs/home mirror the compute nodes see (e.g. Fox);
+# no-op where login and compute paths already match (portable on other clusters).
+if [ "${REPO_ROOT#/home/}" != "$REPO_ROOT" ] && [ -d "/nfs${REPO_ROOT}" ]; then
+	nfsmap(){ printf '/nfs%s' "$1"; }
+else
+	nfsmap(){ printf '%s' "$1"; }
+fi
+NFS_REPO="$(nfsmap "$REPO_ROOT")"
+export REPRO_BASE_ROOT="$(nfsmap "$(dirname "$SCRIPT_DIR")")"
 readonly BIN="b6_multisaxpy_prio"
-readonly NREPS=3
+readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
 
 # Init configs: "N:TS:ITERATIONS:CPUS:IMM:MMAP:PRIO"
@@ -66,8 +73,7 @@ main() {
     "cpus": $cpus, "ppn": 1
 }
 METAEOF
-        local nfs_raw="$(echo "$raw_dir" | sed 's|^/home/|/nfs/home/|')"
-
+        local nfs_raw="$(nfsmap "$raw_dir")"
         echo "  [init] N=$n TS=$ts its=$iterations cpus=$cpus imm=$imm prio=$prio"
         sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
             --switches=1 --export=ALL \
