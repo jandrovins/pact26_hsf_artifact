@@ -37,3 +37,11 @@ oss_overhead/results/
 
 # Agent working notes (local only, not part of the artifact)
 AGENTS.md
+
+# Benchmark run artifacts written into the source dirs at run time
+*/hpccg/*.yaml
+*/oss_overhead/oss_overhead_*.out
+*/oss_overhead/oss_overhead_*.err
+*/oss_overhead/*.dot
+*/multisaxpy/b6_multisaxpy_*
+*/*/b6_multisaxpy_*
