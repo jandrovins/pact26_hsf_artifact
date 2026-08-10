@@ -53,7 +53,14 @@ run_config() {
     export VVV_AFF_FLEXIBLE=$affflex
     export VVV_MMAP_ENABLED=1
     export VVV_PRIORITY_ENABLED=1
-    export VVV_CHOL_GEMM_TILES_PER_BLOCK=48
+    # L3-matched: keep each GEMM batch's output working set ~96 MiB (Genoa-X CCD
+    # L3) instead of a fixed 48 (which only matches L3 at TS=512).
+    # gemmtpb = (96 MiB / 8 bytes) / TS^2 = 12582912 / TS^2.
+    export VVV_CHOL_GEMM_TILES_PER_BLOCK=$(( 12582912 / (ts * ts) ))
+    # GEMM taskgroup blocking is OFF by default: GEMMs use the column round-robin
+    # taskgroups (like potrf/trsm/syrk). Set VVV_CHOL_GEMM_TG=1 to opt into the
+    # separate FIFO GEMM pool (which then uses the gemmtpb value above).
+    export VVV_CHOL_GEMM_TG="${VVV_CHOL_GEMM_TG:-0}"
     export NOSV_CONFIG=nosv.toml
     export NOSV_CONFIG_OVERRIDE="topology.binding=inherit,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false"
 
@@ -67,7 +74,7 @@ run_config() {
     "experiment": "${VVV_EXP_STR}",
     "N": $nsize, "TS": $ts,
     "lower": "$lower", "upper": "$upper", "affflex": $affflex,
-    "useprio": 1, "gemmtpb": 48, "tgenabled": 1,
+    "useprio": 1, "gemmtpb": ${VVV_CHOL_GEMM_TILES_PER_BLOCK}, "tgenabled": 1,
     "imm": "false", "ppn": 1, "mmap": 1
 }
 METAEOF
