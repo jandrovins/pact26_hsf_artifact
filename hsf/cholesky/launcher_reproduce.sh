@@ -9,8 +9,15 @@ set -u
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-NFS_REPO="$REPO_ROOT"
-export REPRO_BASE_ROOT="$(dirname "$SCRIPT_DIR")"
+# Map login /home paths to the /nfs/home mirror the compute nodes see (e.g. Fox);
+# no-op where login and compute paths already match (portable on other clusters).
+if [ "${REPO_ROOT#/home/}" != "$REPO_ROOT" ] && [ -d "/nfs${REPO_ROOT}" ]; then
+	nfsmap(){ printf '/nfs%s' "$1"; }
+else
+	nfsmap(){ printf '%s' "$1"; }
+fi
+NFS_REPO="$(nfsmap "$REPO_ROOT")"
+export REPRO_BASE_ROOT="$(nfsmap "$(dirname "$SCRIPT_DIR")")"
 readonly BIN="cholesky_oss.bin"
 readonly NREPS="${NREPS:-3}"
 readonly PARTITION="${PARTITION:-fox}"
@@ -64,7 +71,7 @@ run_config() {
     "imm": "false", "ppn": 1, "mmap": 1
 }
 METAEOF
-    local nfs_raw="$raw_dir"
+    local nfs_raw="$(nfsmap "$raw_dir")"
     echo "  [tg] N=$nsize TS=$ts lower=$lower upper=$upper flex=$affflex"
     sbatch -p "$PARTITION" --chdir="$NFS_REPO" --array=1-${NREPS} \
         --switches=1 --export=ALL \
