@@ -4,7 +4,7 @@ Artifact for the PACT'26 paper *HSF: A Hierarchical Scheduling Framework for
 Application-Tailored Scheduling on Tasking Runtimes*.
 
 - **Source / DOI:** GitHub `https://github.com/jandrovins/pact26_hsf_artifact` —
-  archived on Zenodo at **DOI: [10.5281/zenodo.21877343](https://doi.org/10.5281/zenodo.21877343)**.
+  archived on Zenodo at **DOI: [10.5281/zenodo.21877252](https://doi.org/10.5281/zenodo.21877252)**.
 - **Target badges:** *Artifacts Available*, *Artifacts Evaluated — Functional*,
   and *Results Reproduced*.
 

@@ -39,7 +39,7 @@ require a dual-socket AMD EPYC 9684X (Genoa-X) node.
   hundreds of short array jobs; wall time is queue-dependent.
 - **Publicly available?** Yes — GitHub + Zenodo DOI.
 - **Code license:** see `COPYING`/per-component licenses.
-- **Archived DOI:** [10.5281/zenodo.21877343](https://doi.org/10.5281/zenodo.21877343).
+- **Archived DOI:** [10.5281/zenodo.21877252](https://doi.org/10.5281/zenodo.21877252).
 
 ## Description
 
