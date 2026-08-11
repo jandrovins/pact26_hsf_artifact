@@ -1,0 +1,12 @@
+=== Heat baseline: N=49152 BS=512 ITS=60 NUMA=1 PROCBIND=0 ===
+[TIMING] before nix develop: 15:11:39.670500751
+Environment variables set:
+  CC=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang
+  CXX=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang++
+  BLIS_HOME=/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/16cj32h5mdv4aqbd12ncngih2906x308-amd-libflame-5.1
+[TIMING] inside nix shell: 15:11:42.008832983
+[TIMING] after build check: 15:11:42.012154369
+  1.168658e+01   1.240356e+10   0.000000e+00    49152    49152      512      512       60 heat_omp
+[TIMING] after run: 15:12:03.516387913
+[TIMING] after nix develop exit: 15:12:03.520423142

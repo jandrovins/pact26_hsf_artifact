@@ -1,0 +1,58 @@
+=== HPCCG HSF: nx=288 ny=192 nz=768 ntasks=4608 ===
+VVV_TG_ENABLED=1 VVV_LOWER_LVL=cs
+VVV_SPMV_TG_ENABLED=1 VVV_SPMV_POLICY=FIFO
+[TIMING] before nix develop: 12:31:54.356392520
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  PAPI_HOME=/nix/store/lrhn2sdjgmbsjb22kk5rsaysr419rnly-papi-7.2.0
+  OVNI_HOME=/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0
+  NODES_HOME=/nix/store/g84v80gmx1mhshfddqxs9lbqrvcf8xcv-nodes-haffsched-debug2
+  NOSV_HOME=/nix/store/y1hg258pxa0lxg78vqvxisvffygnbnxh-nosv-haffsched-local-hwc-counters
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1
+  TGLIB_HOME=/nix/store/rb92fylnlkc1jfs01an1awzc9i5zggnh-tglib-d78d0a4
+[TIMING] inside nix shell: 12:31:56.428441434
+[TIMING] after build check: 12:31:56.433388939
+Process ID: 430487, Rank: 0, Host: fox
+11. r --- Sizeof double*nrow: 339738624
+12. p --- Sizeof double*ncol: 339738624
+13. Ap --- Sizeof double*nrow: 339738624
+14. blk_info_array --- Sizeof Blk_info*num_blocks: 36864
+15. deps --- Sizeof bool*ncol: 42467328
+16. dep_idx_list --- Sizeof int*27*(num_blocks): 497664
+17. dep_ptr_to_idx_list --- Sizeof (int *)*num_blocks: 36864
+18. dep_size --- Sizeof int*num_blocks: 18432
+Total memory allocated: 1062273024
+--------------- ALLOCATIONS ---------------
+NUM_PART: 4 || nrow: 42467328 || cpus: 96 || chunk: 9216 || num_blocks: 4608
+Initial Residual = 11255.7
+fniters: 100
+fnrow: 4.24673e+07
+fnnz: 1.14662e+09
+fnops_ddot: 1.69869e+10
+fnops_waxpby: 2.54804e+10
+fnops_sparsemv: 2.29324e+11
+fnops: 2.71791e+11
+Mini-Application Name: hpccg_ompss_ranks1_nx288_ny192_nz768_maxiter100_ntasks4608_nthreads96
+Mini-Application Version: 1.0
+Parallelism: 
+  Number of MPI ranks: 1
+  Number of OmpSs cores: 96
+Dimensions: 
+  nx: 288
+  ny: 192
+  nz: 768
+Number of iterations: 100
+Final residual: 9.40702e-11
+#********** Performance Summary (times in sec) ***********: 
+Time Summary: 
+  Total   : 7.23929
+FLOPS Summary: 
+  Total   : 2.71791e+11
+MFLOPS Summary: 
+  Total   : 37543.8
+time,7.239294,nx,288,ny,192,nz,768,ranks,1,threads,96,ntasks,4608,iterations,100,flops,271790899200.000000,mflops,37543.841331,total_mem(bytes),1062273024
+[TIMING] after srun: 12:33:26.838279941
+[TIMING] after nix develop exit: 12:33:26.844113363

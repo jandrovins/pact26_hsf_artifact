@@ -1,0 +1,90 @@
+srun: Updating SLURM_TRES_PER_TASK to cpu=192 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : (null)
+srun: cpus-per-task       : 192
+srun: exclusive           : exclusive
+srun: jobid               : 52554
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=192
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52554: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,none
+srun: launching StepId=52554.0 on host fox, 1 tasks: 0
+cpu-bind=NONE - fox, task  0  0 [435017]: mask 0xffffffffffffffffffffffffffffffffffffffffffffffff
+srun: Node fox, 1 tasks started
+NOS-V WARNING in ./src/include/scheduler/cpubitset.h:264:cpu_bitset_print_mask(): Effective binding: {0-191}
+VVV_UPPER_LVL set to: numa
+VVV_LOWER_LVL set to: cs
+VVV_TG_POLICY set to: PRIO (default)
+VVV_TG_ENABLED effective value: 1
+VVV_AFF_FLEXIBLE effective value: 1
+VVV_TG_ENABLED set to: 1 (enabled)
+tglib_manager values:
+  tg_enabled      = 1
+  upper_level     = 1
+  lower_level     = 2
+  sched_policy    = 5
+  flexible_aff    = 1
+  num_task_groups = 0
+  taskgroups ptr  = (nil)
+  L3 domain size: 96 MiB (VVV_L3_SIZE_MIB=96)
+  Affinity tuning: force_nblocks=1 (VVV_FORCE_NBLOCKS=1)
+  Warning: cannot factor 24 domains into a valid 2D grid for 256 x 256 tiles — falling back to L3-optimal sizing.
+Matmul 2D Task Group Creation Report:
+  Matrix tile grid: 256 rows x 256 cols (k-dim: 256)
+  Tile size: 192 x 192 = 288.00 KiB
+  2D superblock: Sr=16 x Sc=16 tiles (row balance: exact, col balance: exact)
+  Working set per block: 288 tiles = 81.00 MiB (C=256 + A=16 + B=16)
+  Superblock grid: 16 x 16 = 256 blocks
+  All superblocks are equal size — perfect load balance
+  Hierarchy mode: flat
+  Affinity: lower=cs upper=numa flexible=1 force_nblocks=1
+  Available lower-level domains: 24
+  Block distribution per lower-level domain:
+    domain 0: 11 blocks
+    domain 1: 11 blocks
+    domain 2: 11 blocks
+    domain 3: 11 blocks
+    domain 4: 11 blocks
+    domain 5: 11 blocks
+    domain 6: 11 blocks
+    domain 7: 11 blocks
+    domain 8: 11 blocks
+    domain 9: 11 blocks
+    domain 10: 11 blocks
+    domain 11: 11 blocks
+    domain 12: 11 blocks
+    domain 13: 11 blocks
+    domain 14: 11 blocks
+    domain 15: 11 blocks
+    domain 16: 10 blocks
+    domain 17: 10 blocks
+    domain 18: 10 blocks
+    domain 19: 10 blocks
+    domain 20: 10 blocks
+    domain 21: 10 blocks
+    domain 22: 10 blocks
+    domain 23: 10 blocks
+Allocating 90.00 GiB of memory
+[Proc 435017, Thread 137183453238976] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 435017, Thread 137183453238976] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+srun: Received task exit notification for 1 task of StepId=52554.0 (status=0x0000).
+srun: fox: task 0: Completed

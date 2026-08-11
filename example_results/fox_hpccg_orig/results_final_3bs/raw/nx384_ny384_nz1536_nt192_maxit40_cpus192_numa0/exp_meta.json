@@ -1,0 +1,9 @@
+{
+    "experiment": "nx384_ny384_nz1536_nt192_maxit40_cpus192_numa0",
+    "nx": 384, "ny": 384, "nz": 1536, "ntasks": 192,
+    "maxit": 40, "tgenabled": 0,
+    "lower": "node", "upper": "node", "flex": 0,
+    "imm": "true", "ppn": 1, "cpuspertask": 192,
+    "threads": 192, "bsf": 4, "mmap": 1,
+    "numainterleaved": 0
+}

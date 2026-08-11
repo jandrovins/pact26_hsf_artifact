@@ -1,0 +1,26 @@
+=== Cholesky baseline: N=6144 CPUS=96 NUMA=1 ===
+[TIMING] before nix develop: 15:03:35.682503282
+Environment variables set:
+  CC=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang
+  CXX=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang++
+  BLIS_HOME=/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/16cj32h5mdv4aqbd12ncngih2906x308-amd-libflame-5.1
+[TIMING] inside nix shell: 15:03:37.990863095
+[TIMING] after build check: 15:03:37.993675950
+AOCL-BLAS version       : AOCL-BLAS 5.1.0 Build 19800101
+AOCL-BLAS OpenMP        : enabled
+AOCL-BLAS pthreads      : disabled
+AOCL-BLAS threading     : enabled
+AOCL-BLAS num threads   : 96
+NUMA interleaved allocation: yes
+NUMA interleaved subset nodes: 0 1 2 3
+Matrix size: 301989888 bytes
+Matrix dimensions: 6144 x 6144
+NUMA page distribution for matrix a (73728 pages, page_size=4096):
+  NUMA node 0: 18432 pages (25.00%)
+  NUMA node 1: 18432 pages (25.00%)
+  NUMA node 2: 18432 pages (25.00%)
+  NUMA node 3: 18432 pages (25.00%)
+Printing result:   3.791169e-01   2.019303e+02           6144
+[TIMING] after run: 15:03:38.618843560
+[TIMING] after nix develop exit: 15:03:38.624063192

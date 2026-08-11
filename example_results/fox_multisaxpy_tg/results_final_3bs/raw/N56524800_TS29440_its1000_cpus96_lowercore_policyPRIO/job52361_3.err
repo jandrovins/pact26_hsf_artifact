@@ -1,0 +1,44 @@
+srun: Setting --cpu-bind=threads,verbose as a default of --threads-per-core use
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : verbose
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 52361
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52361: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,threads
+srun: launching StepId=52361.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [437950]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+NOS-V WARNING in ./src/include/scheduler/cpubitset.h:264:cpu_bitset_print_mask(): Effective binding: {0-95}
+VVV_UPPER_LVL set to: NUMA (default)
+VVV_LOWER_LVL set to: core
+VVV_TG_POLICY set to: PRIO
+VVV_TG_ENABLED effective value: 1
+VVV_AFF_FLEXIBLE effective value: 0
+VVV_TG_ENABLED set to: 1 (enabled)
+tglib_manager values:
+  tg_enabled      = 1
+  upper_level     = 1
+  lower_level     = 3
+  sched_policy    = 5
+  flexible_aff    = 0
+  num_task_groups = 0
+  taskgroups ptr  = (nil)
+INFO: tglib_create_taskgroups_per_domain: num_doms = 96 lower_level=3
+INFO: tglib_create_taskgroups_per_domain: Creating 96 task groups
+srun: Received task exit notification for 1 task of StepId=52361.0 (status=0x0000).
+srun: fox: task 0: Completed

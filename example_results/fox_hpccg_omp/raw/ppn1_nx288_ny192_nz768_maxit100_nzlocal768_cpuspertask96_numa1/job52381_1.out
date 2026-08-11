@@ -1,0 +1,79 @@
+=== HPCCG baseline: nx=288 ny=192 nzlocal=768 maxit=100 ppn=1 cpus=96 numa=1 ===
+[TIMING] before nix develop: 15:13:33.165028382
+Environment variables set:
+  CC=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang
+  CXX=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang++
+  BLIS_HOME=/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/16cj32h5mdv4aqbd12ncngih2906x308-amd-libflame-5.1
+[TIMING] inside nix shell: 15:13:35.507174231
+Building test_HPCCG...
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o main.o main.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o generate_matrix.o generate_matrix.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o read_HPC_row.o read_HPC_row.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o compute_residual.o compute_residual.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o mytimer.o mytimer.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o dump_matlab_matrix.o dump_matlab_matrix.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o HPC_sparsemv.o HPC_sparsemv.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o HPCCG.o HPCCG.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o waxpby.o waxpby.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o ddot.o ddot.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o make_local_matrix.o make_local_matrix.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o exchange_externals.o exchange_externals.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o YAML_Element.o YAML_Element.cpp
+clang++ -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp -DUSING_OMP -DUSING_MPI  -DUSING_NUMA   -c -o YAML_Doc.o YAML_Doc.cpp
+MPICH_CXX=clang++ OMPI_CXX=clang++ I_MPI_CXX=clang++ mpicxx -O3 -ffast-math -march=znver4 -mtune=znver4 -fopenmp main.o generate_matrix.o read_HPC_row.o compute_residual.o mytimer.o dump_matlab_matrix.o HPC_sparsemv.o HPCCG.o waxpby.o ddot.o make_local_matrix.o exchange_externals.o YAML_Element.o YAML_Doc.o -lm -lnuma -o test_HPCCG
+[TIMING] after build check: 15:13:36.356245836
+NUMA interleaved subset nodes: 0 1 2 3
+NUMA interleaved subset nodes: 0 1 2 3
+Initial Residual = 11255.7
+Iteration = 10   Residual = 846.954
+Iteration = 20   Residual = 28.3786
+Iteration = 30   Residual = 1.02261
+Iteration = 40   Residual = 0.0368316
+Iteration = 50   Residual = 0.00132478
+Iteration = 60   Residual = 4.75551e-05
+Iteration = 70   Residual = 1.70157e-06
+Iteration = 80   Residual = 6.05367e-08
+Iteration = 90   Residual = 2.12867e-09
+Iteration = 99   Residual = 9.40702e-11
+Mini-Application Name: hpccg
+Mini-Application Version: 1.0
+Parallelism: 
+  Number of MPI ranks: 1
+  Number of OpenMP threads: 96
+Dimensions: 
+  nx: 288
+  ny: 192
+  nz: 768
+Number of iterations: 99
+Final residual: 9.40702e-11
+#********** Performance Summary (times in sec) ***********: 
+Time Summary: 
+  Total   : 7.222
+  DDOT    : 0.253113
+  WAXPBY  : 0.549835
+  SPARSEMV: 6.32307
+FLOPS Summary: 
+  Total   : 2.69073e+11
+  DDOT    : 1.68171e+10
+  WAXPBY  : 2.52256e+10
+  SPARSEMV: 2.2703e+11
+MFLOPS Summary: 
+  Total   : 37257.4
+  DDOT    : 66441
+  WAXPBY  : 45878.5
+  SPARSEMV: 35905.1
+DDOT Timing Variations: 
+  Min DDOT MPI_Allreduce time: 0.000184329
+  Max DDOT MPI_Allreduce time: 0.000184329
+  Avg DDOT MPI_Allreduce time: 0.000184329
+SPARSEMV OVERHEADS: 
+  SPARSEMV MFLOPS W OVERHEAD: 29793.3
+  SPARSEMV PARALLEL OVERHEAD Time: 1.29711
+  SPARSEMV PARALLEL OVERHEAD Pct: 17.022
+  SPARSEMV PARALLEL OVERHEAD Setup Time: 1.29686
+  SPARSEMV PARALLEL OVERHEAD Setup Pct: 17.0187
+  SPARSEMV PARALLEL OVERHEAD Bdry Exch Time: 0.000254377
+  SPARSEMV PARALLEL OVERHEAD Bdry Exch Pct: 0.0033382
+[TIMING] after srun: 15:13:55.073343668
+[TIMING] after nix develop exit: 15:13:55.077343447

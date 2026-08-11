@@ -1,0 +1,7 @@
+{
+    "experiment": "N33792_TS512_lowernuma_uppernuma_flex0",
+    "N": 33792, "TS": 512,
+    "lower": "numa", "upper": "numa", "affflex": 0,
+    "useprio": 1, "gemmtpb": 48, "tgenabled": 1,
+    "imm": "false", "ppn": 1, "mmap": 1
+}

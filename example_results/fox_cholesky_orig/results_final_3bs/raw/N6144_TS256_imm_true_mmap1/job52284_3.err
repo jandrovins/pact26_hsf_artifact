@@ -1,0 +1,63 @@
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : (null)
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 52284
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52284: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,none
+srun: launching StepId=52284.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [383673]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+Using configuration file nosv.toml
+Parsed options: 
+scheduler.quantum_ns = 20000000
+scheduler.queue_batch = 64
+scheduler.cpus_per_queue = 1
+scheduler.in_queue_size = 256
+scheduler.immediate_successor = 1
+shared_memory.name = "nosv"
+shared_memory.isolation_level = "process"
+shared_memory.start = 0x200000000000
+shared_memory.size = 8589934592
+task_affinity.default = "all"
+task_affinity.default_policy = "strict"
+thread_affinity.compat_support = 1
+topology.binding = "inherit"
+topology.numa_nodes = "(null)"
+topology.complex_sets = "(null)"
+topology.print = 0
+debug.dump_config = 1
+debug.print_binding = 1
+governor.policy = "hybrid"
+governor.spins = 10000
+hwcounters.verbose = 0
+hwcounters.backend = "none"
+hwcounters.papi_events = ["PAPI_TOT_INS","PAPI_TOT_CYC"]
+turbo.enabled = 1
+monitoring.enabled = 0
+monitoring.verbose = 0
+instrumentation.version = "none"
+misc.stack_size = 8388608
+ovni.level = 3
+ovni.events = []
+ovni.kernel_ringsize = 4194304
+NOS-V WARNING in topo_init(): Binding parsed from config: 0-95
+valloc: allocation mode = mmap
+VALLOC: [Proc 383673, Thread 140478666217152] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 383673, Thread 140478666217152] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+srun: Received task exit notification for 1 task of StepId=52284.0 (status=0x0000).
+srun: fox: task 0: Completed

@@ -1,0 +1,9 @@
+{
+    "experiment": "N6144_M6144_TS512_its20_lowercs_uppercs_flex0",
+    "N": 6144, "M": 6144, "TS": 512,
+    "tgenabled": 1, "hier": 0,
+    "lower": "cs", "upper": "cs", "affflex": 0,
+    "imm": "false", "ppn": 1, "mmap": 1,
+    "forcenb": 1, "hwc": "none", "l3": 96,
+    "its": 20
+}

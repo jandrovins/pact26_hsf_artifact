@@ -1,0 +1,78 @@
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : (null)
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 52548
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52548: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,none
+srun: launching StepId=52548.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [433371]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+NOS-V WARNING in ./src/include/scheduler/cpubitset.h:264:cpu_bitset_print_mask(): Effective binding: {0-95}
+VVV_UPPER_LVL set to: cs
+VVV_LOWER_LVL set to: cs
+VVV_TG_POLICY set to: PRIO (default)
+VVV_TG_ENABLED effective value: 1
+VVV_AFF_FLEXIBLE effective value: 0
+VVV_TG_ENABLED set to: 1 (enabled)
+tglib_manager values:
+  tg_enabled      = 1
+  upper_level     = 2
+  lower_level     = 2
+  sched_policy    = 5
+  flexible_aff    = 0
+  num_task_groups = 0
+  taskgroups ptr  = (nil)
+  L3 domain size: 96 MiB (VVV_L3_SIZE_MIB=96)
+  Affinity tuning: force_nblocks=1 (VVV_FORCE_NBLOCKS=1)
+  Forced 12 blocks (1:1 domain mapping): Sr=11, Sc=8
+Matmul 2D Task Group Creation Report:
+  Matrix tile grid: 32 rows x 32 cols (k-dim: 32)
+  Tile size: 192 x 192 = 288.00 KiB
+  2D superblock: Sr=11 x Sc=8 tiles (row balance: runt (fallback), col balance: exact)
+  Working set per block: 107 tiles = 30.09 MiB (C=88 + A=11 + B=8)
+  Superblock grid: 3 x 4 = 12 blocks
+  Boundary superblock: 10 x 8 tiles (90.9% of full block work)
+  Hierarchy mode: flat
+  Affinity: lower=cs upper=cs flexible=0 force_nblocks=1
+  Available lower-level domains: 12
+  Block distribution per lower-level domain:
+    domain 0: 1 blocks
+    domain 1: 1 blocks
+    domain 2: 1 blocks
+    domain 3: 1 blocks
+    domain 4: 1 blocks
+    domain 5: 1 blocks
+    domain 6: 1 blocks
+    domain 7: 1 blocks
+    domain 8: 1 blocks
+    domain 9: 1 blocks
+    domain 10: 1 blocks
+    domain 11: 1 blocks
+Allocating 1.41 GiB of memory
+[Proc 433371, Thread 140143637804736] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 433371, Thread 140143637804736] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+srun: Received task exit notification for 1 task of StepId=52548.0 (status=0x0000).
+srun: fox: task 0: Completed

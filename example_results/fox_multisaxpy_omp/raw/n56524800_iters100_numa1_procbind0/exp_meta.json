@@ -1,0 +1,5 @@
+{
+    "experiment": "n56524800_iters100_numa1_procbind0",
+    "ppn": 1, "cpuspertask": 96, "nsize": 56524800, "iters": 100,
+    "numa": 1, "procbind": 0
+}

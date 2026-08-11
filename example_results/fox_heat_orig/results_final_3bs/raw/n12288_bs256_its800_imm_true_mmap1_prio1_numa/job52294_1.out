@@ -1,0 +1,17 @@
+=== Heat nosvorig: N=12288 BS=256 ITS=800 ===
+[TIMING] before nix develop: 08:41:20.012780429
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  NODES_HOME=/nix/store/c07kvghf5gm7zib1zdzkk21y8z77icyb-nodes-1.4.0
+  NOSV_HOME=/nix/store/nxsh19kbfdz9krm5n7yf6g072zjiwyqa-nosv-4.0.0
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+[TIMING] inside nix shell: 08:41:22.955444336
+Building 02.heat_ompss2_prio.bin...
+clang -DSIMD -march=native -O3 -ffast-math -std=gnu11 -g3  -fopenmp-simd -fompss-2=libnodes -I/include -o 02.heat_ompss2_prio.bin misc.c main_smp_prio.c -lrt -lm -lovni -L/lib -lvalloc -lnuma
+[TIMING] after build check: 08:41:23.498115760
+  1.726762e+01   6.995519e+09   0.000000e+00    12288    12288      256      256      800 heat_result
+[TIMING] after srun: 08:41:42.145631868
+[TIMING] after nix develop exit: 08:41:42.149862604

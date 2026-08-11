@@ -1,0 +1,8 @@
+{
+    "experiment": "nx384_ny384_nz1536_nt3072_maxit40_lower_cs_upper_cs_flex0_bsf4",
+    "nx": 384, "ny": 384, "nz": 1536, "ntasks": 3072,
+    "maxit": 40, "tgenabled": 1,
+    "lower": "cs", "upper": "cs", "flex": 0,
+    "imm": "false", "ppn": 1,
+    "threads": 192, "bsf": 4
+}

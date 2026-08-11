@@ -1,0 +1,10 @@
+NUMA distribution for x (110400 pages):
+  node  0:  27600 pages  (25.0%)
+  node  1:  27600 pages  (25.0%)
+  node  2:  27600 pages  (25.0%)
+  node  3:  27600 pages  (25.0%)
+NUMA distribution for y (110400 pages):
+  node  0:  27600 pages  (25.0%)
+  node  1:  27600 pages  (25.0%)
+  node  2:  27600 pages  (25.0%)
+  node  3:  27600 pages  (25.0%)

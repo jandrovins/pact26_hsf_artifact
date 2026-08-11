@@ -1,0 +1,21 @@
+=== Multisaxpy HSF: N=56524800 TS=29440 its=1000 ===
+VVV_TG_ENABLED=1 VVV_LOWER_LVL=core VVV_TG_POLICY=PRIO
+[TIMING] before nix develop: 13:51:29.284328013
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  PAPI_HOME=/nix/store/lrhn2sdjgmbsjb22kk5rsaysr419rnly-papi-7.2.0
+  OVNI_HOME=/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0
+  NODES_HOME=/nix/store/g84v80gmx1mhshfddqxs9lbqrvcf8xcv-nodes-haffsched-debug2
+  NOSV_HOME=/nix/store/y1hg258pxa0lxg78vqvxisvffygnbnxh-nosv-haffsched-local-hwc-counters
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1
+  TGLIB_HOME=/nix/store/rb92fylnlkc1jfs01an1awzc9i5zggnh-tglib-d78d0a4
+[TIMING] inside nix shell: 13:51:31.367870217
+Building b6_multisaxpy_nodes...
+clang++ -O3 -DSIMD -D_POSIX_C_SOURCE=200809L -DNDEBUG -fopenmp-simd -fompss-2=libnodes -I/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0/include -std=c++17 multisaxpy.cpp -o b6_multisaxpy_nodes -pthread -lm -ldl -lpthread -L/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0/lib -lovni -ltglib -lnuma
+[TIMING] after build check: 13:51:31.947118239
+Printing result   3.320497e+00 56524800 29440 1000   3.404599e+01
+[TIMING] after srun: 13:51:36.073082563
+[TIMING] after nix develop exit: 13:51:36.077840945

@@ -1,0 +1,15 @@
+=== Heat nosvorig: N=12288 BS=1024 ITS=800 ===
+[TIMING] before nix develop: 08:43:50.324763300
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  NODES_HOME=/nix/store/c07kvghf5gm7zib1zdzkk21y8z77icyb-nodes-1.4.0
+  NOSV_HOME=/nix/store/nxsh19kbfdz9krm5n7yf6g072zjiwyqa-nosv-4.0.0
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+[TIMING] inside nix shell: 08:43:52.996008557
+[TIMING] after build check: 08:43:52.999754534
+  2.089991e+01   5.779737e+09   0.000000e+00    12288    12288     1024     1024      800 heat_result
+[TIMING] after srun: 08:44:14.947545571
+[TIMING] after nix develop exit: 08:44:14.951702836

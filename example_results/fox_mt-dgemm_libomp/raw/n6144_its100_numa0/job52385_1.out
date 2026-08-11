@@ -1,0 +1,32 @@
+=== Matmul baseline: N=6144 ITS=100 CPUS=96 NUMA=0 ===
+[TIMING] before nix develop: 15:20:06.145921071
+Environment variables set:
+  CC=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang
+  CXX=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang++
+  BLIS_HOME=/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/16cj32h5mdv4aqbd12ncngih2906x308-amd-libflame-5.1
+[TIMING] inside nix shell: 15:20:08.489817651
+Building mt-dgemm (numa target)...
+clang -ffast-math -march=znver4 -mtune=znver4 -O3 -fopenmp -D_GNU_SOURCE -DUSE_CBLAS -DUSE_BLIS -I/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1/include/blis -DUSE_NUMA_INTERLEAVE -o mt-dgemm mt-dgemm.c -L/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1/lib -lblis-mt -lnuma
+[TIMING] after build check: 15:20:08.731332147
+Matrix size input by command line: 6144
+Repeat multiply 100 times.
+Alpha =    1.000000
+Beta  =    1.000000
+Allocating Matrices...
+NUMA interleaved subset nodes: 0 1 2 3
+NUMA interleaved allocation enabled
+Allocation complete, populating with values...
+Performing multiplication...
+Calculating matrix check...
+
+===============================================================
+Final Sum is:         6144.010000
+Memory for Matrices:  864.000000 MB
+Multiply time:        14.269423 seconds
+FLOPs computed:       46393196544000.000000
+GFLOP/s rate:         3251.231430 GF/s
+===============================================================
+
+[TIMING] after run: 15:20:23.248075954
+[TIMING] after nix develop exit: 15:20:23.253262306

@@ -1,0 +1,5 @@
+{
+    "experiment": "n12288_b768_t800_numa0_procbind0",
+    "ppn": 1, "cpuspertask": 96, "n": 12288, "bs": 768, "its": 800,
+    "numa": 0, "procbind": 0
+}

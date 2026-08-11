@@ -1,0 +1,36 @@
+=== Cholesky nosvorig: N=33792 TS=512 ===
+NOSV_CONFIG_OVERRIDE=topology.binding=inherit,monitoring.enabled=false,monitoring.verbose=false,hwcounters.backend=none,scheduler.immediate_successor=true,instrumentation.version=none
+[TIMING] before nix develop: 08:38:31.579677778
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  NODES_HOME=/nix/store/c07kvghf5gm7zib1zdzkk21y8z77icyb-nodes-1.4.0
+  NOSV_HOME=/nix/store/nxsh19kbfdz9krm5n7yf6g072zjiwyqa-nosv-4.0.0
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+[TIMING] inside nix shell: 08:38:34.248034237
+[TIMING] after build check: 08:38:34.251239154
+Matrix size: 9135194112 bytes
+Matrix dimensions: 33792 x 33792
+NUMA page distribution for matrix a (2230272 pages, page_size=4096):
+  NUMA node 0: 175104 pages (7.85%)
+  NUMA node 1: 184320 pages (8.26%)
+  NUMA node 2: 190464 pages (8.54%)
+  NUMA node 3: 189952 pages (8.52%)
+  NUMA node 4: 372736 pages (16.71%)
+  NUMA node 5: 373760 pages (16.76%)
+  NUMA node 6: 375296 pages (16.83%)
+  NUMA node 7: 368640 pages (16.53%)
+NUMA page distribution for matrix a (2230272 pages, page_size=4096):
+  NUMA node 0: 175104 pages (7.85%)
+  NUMA node 1: 184320 pages (8.26%)
+  NUMA node 2: 190464 pages (8.54%)
+  NUMA node 3: 189952 pages (8.52%)
+  NUMA node 4: 372736 pages (16.71%)
+  NUMA node 5: 373760 pages (16.76%)
+  NUMA node 6: 375296 pages (16.83%)
+  NUMA node 7: 368640 pages (16.53%)
+Printing result:   2.247207e+00   5.666723e+03          33792            512
+[TIMING] after srun: 08:38:40.988351152
+[TIMING] after nix develop exit: 08:38:40.993368962

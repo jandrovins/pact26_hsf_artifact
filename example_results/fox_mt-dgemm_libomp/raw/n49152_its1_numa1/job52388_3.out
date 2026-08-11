@@ -1,0 +1,30 @@
+=== Matmul baseline: N=49152 ITS=1 CPUS=192 NUMA=1 ===
+[TIMING] before nix develop: 15:25:54.296891283
+Environment variables set:
+  CC=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang
+  CXX=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang++
+  BLIS_HOME=/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/16cj32h5mdv4aqbd12ncngih2906x308-amd-libflame-5.1
+[TIMING] inside nix shell: 15:25:57.159789540
+[TIMING] after build check: 15:25:57.162649926
+Matrix size input by command line: 49152
+Repeat multiply 1 times.
+Alpha =    1.000000
+Beta  =    1.000000
+Allocating Matrices...
+NUMA interleaved subset nodes: 0 1 2 3 4 5 6 7
+NUMA interleaved allocation enabled
+Allocation complete, populating with values...
+Performing multiplication...
+Calculating matrix check...
+
+===============================================================
+Final Sum is:         49153.000000
+Memory for Matrices:  55296.000000 MB
+Multiply time:        35.811864 seconds
+FLOPs computed:       237499343437824.000000
+GFLOP/s rate:         6631.862096 GF/s
+===============================================================
+
+[TIMING] after run: 15:26:42.315639280
+[TIMING] after nix develop exit: 15:26:42.320586937

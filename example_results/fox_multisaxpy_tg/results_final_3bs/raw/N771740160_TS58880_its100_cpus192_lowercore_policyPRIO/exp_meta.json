@@ -1,0 +1,6 @@
+{
+    "experiment": "N771740160_TS58880_its100_cpus192_lowercore_policyPRIO",
+    "label": "prio_per_core", "lower": "core", "policy": "PRIO",
+    "N": 771740160, "TS": 58880, "iterations": 100,
+    "cpus": 192, "ppn": 1
+}

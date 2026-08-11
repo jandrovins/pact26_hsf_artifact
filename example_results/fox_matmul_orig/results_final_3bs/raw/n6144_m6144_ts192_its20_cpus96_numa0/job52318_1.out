@@ -1,0 +1,17 @@
+=== Matmul nosvorig: N=6144 M=6144 TS=192 ITS=20 ===
+[TIMING] before nix develop: 11:28:33.234543398
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  NODES_HOME=/nix/store/c07kvghf5gm7zib1zdzkk21y8z77icyb-nodes-1.4.0
+  NOSV_HOME=/nix/store/nxsh19kbfdz9krm5n7yf6g072zjiwyqa-nosv-4.0.0
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+[TIMING] inside nix shell: 11:28:36.418842742
+Building...
+MPICH_CC=clang I_MPI_CC=clang OMPI_CC=clang mpicc -Isrc -D_GNU_SOURCE -g -std=c11 -O3 -ffast-math -march=native -mtune=native -fompss-2=libnodes -DUSE_BLIS -I/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1/include/blis -I/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1/include -DTAMPI src/common/matmul.c src/mpi/main.c src/mpi/matmul_ompss2_itampi.c -o 02.matmul_ompss2_itampi.bin -ltampi-c -L/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1/lib -Wl,--enable-new-dtags -Wl,-rpath=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1/lib -lrt -lm -lnuma -lcblas -lvalloc
+[TIMING] after build check: 11:28:37.226391337
+Printing result   2.516252e+00 6144 6144 20 192   3.686884e+03
+[TIMING] after srun: 11:28:40.892839843
+[TIMING] after nix develop exit: 11:28:40.897459700

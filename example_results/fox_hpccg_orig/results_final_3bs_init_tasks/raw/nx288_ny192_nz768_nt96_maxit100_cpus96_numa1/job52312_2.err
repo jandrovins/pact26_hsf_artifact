@@ -1,0 +1,74 @@
+srun: Setting --cpu-bind=threads,verbose as a default of --threads-per-core use
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : verbose
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 52458
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52458: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,threads
+srun: launching StepId=52458.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [403651]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+NUMA interleaved allocation on nodes: 0 1 2 3
+NUMA page distribution for list_of_vals (2239488 pages, page_size=4096):
+  NUMA node 0: 556154 pages (24.83%)  (2278006784 bytes)
+  NUMA node 1: 556154 pages (24.83%)  (2278006784 bytes)
+  NUMA node 2: 556153 pages (24.83%)  (2278002688 bytes)
+  NUMA node 3: 556153 pages (24.83%)  (2278002688 bytes)
+  NUMA node 4: 0 pages (0.00%)  (0 bytes)
+  NUMA node 5: 0 pages (0.00%)  (0 bytes)
+  NUMA node 6: 0 pages (0.00%)  (0 bytes)
+  NUMA node 7: 0 pages (0.00%)  (0 bytes)
+NUMA page distribution for list_of_inds (2239488 pages, page_size=4096):
+  NUMA node 0: 556154 pages (24.83%)  (2278006784 bytes)
+  NUMA node 1: 556154 pages (24.83%)  (2278006784 bytes)
+  NUMA node 2: 556153 pages (24.83%)  (2278002688 bytes)
+  NUMA node 3: 556153 pages (24.83%)  (2278002688 bytes)
+  NUMA node 4: 0 pages (0.00%)  (0 bytes)
+  NUMA node 5: 0 pages (0.00%)  (0 bytes)
+  NUMA node 6: 0 pages (0.00%)  (0 bytes)
+  NUMA node 7: 0 pages (0.00%)  (0 bytes)
+NUMA page distribution for x (82944 pages, page_size=4096):
+  NUMA node 0: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 1: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 2: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 3: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 4: 0 pages (0.00%)  (0 bytes)
+  NUMA node 5: 0 pages (0.00%)  (0 bytes)
+  NUMA node 6: 0 pages (0.00%)  (0 bytes)
+  NUMA node 7: 0 pages (0.00%)  (0 bytes)
+NUMA page distribution for b (82944 pages, page_size=4096):
+  NUMA node 0: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 1: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 2: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 3: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 4: 0 pages (0.00%)  (0 bytes)
+  NUMA node 5: 0 pages (0.00%)  (0 bytes)
+  NUMA node 6: 0 pages (0.00%)  (0 bytes)
+  NUMA node 7: 0 pages (0.00%)  (0 bytes)
+NUMA page distribution for xexact (82944 pages, page_size=4096):
+  NUMA node 0: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 1: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 2: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 3: 20736 pages (25.00%)  (84934656 bytes)
+  NUMA node 4: 0 pages (0.00%)  (0 bytes)
+  NUMA node 5: 0 pages (0.00%)  (0 bytes)
+  NUMA node 6: 0 pages (0.00%)  (0 bytes)
+  NUMA node 7: 0 pages (0.00%)  (0 bytes)
+taskSize=442368
+srun: Received task exit notification for 1 task of StepId=52458.0 (status=0x0000).
+srun: fox: task 0: Completed

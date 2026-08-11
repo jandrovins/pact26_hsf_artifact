@@ -1,0 +1,6 @@
+{
+    "experiment": "ppn1_nx288_ny192_nz768_maxit100_nzlocal768_cpuspertask96_numa1",
+    "ppn": 1, "cpuspertask": 96,
+    "nx": 288, "ny": 192, "nz": 768, "maxit": 100,
+    "nzlocal": 768, "numa": 1
+}

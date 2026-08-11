@@ -1,0 +1,167 @@
+srun: Setting --cpu-bind=threads,verbose as a default of --threads-per-core use
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : verbose
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 52348
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52348: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,threads
+srun: launching StepId=52348.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [429377]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+NOS-V WARNING in ./src/include/scheduler/cpubitset.h:264:cpu_bitset_print_mask(): Effective binding: {0-95}
+VVV_UPPER_LVL set to: cs
+VVV_LOWER_LVL set to: cs
+VVV_TG_POLICY set to: PRIO (default)
+VVV_TG_ENABLED effective value: 1
+VVV_AFF_FLEXIBLE effective value: 0
+VVV_TG_ENABLED set to: 1 (enabled)
+tglib_manager values:
+  tg_enabled      = 1
+  upper_level     = 2
+  lower_level     = 2
+  sched_policy    = 5
+  flexible_aff    = 0
+  num_task_groups = 0
+  taskgroups ptr  = (nil)
+INFO: tglib_create_taskgroups_per_domain: num_doms = 12 lower_level=2
+INFO: tglib_create_taskgroups_per_domain: Creating 12 task groups
+tglib: 12 main TGs for 42467328 rows
+Created 12 sparsemv TGs (12 domains x 1 mult, policy=FIFO, flex=1, imm=1)
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+Process 0 generating matrix with 42467328 rows. Tasksize: 442368
+Process 0 finished generating 1139001976 nonzeros.
+[Rank 0] Buffer A.nnz_in_row: size=169869312 B (162 MiB), pages=41472
+  NUMA 0: 10368 pages (25%)
+  NUMA 1: 10368 pages (25%)
+  NUMA 2: 10368 pages (25%)
+  NUMA 3: 10368 pages (25%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Buffer A.ptr_to_vals_in_row: size=339738624 B (324 MiB), pages=82944
+  NUMA 0: 20736 pages (25%)
+  NUMA 1: 20736 pages (25%)
+  NUMA 2: 20736 pages (25%)
+  NUMA 3: 20736 pages (25%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Buffer A.ptr_to_inds_in_row: size=339738624 B (324 MiB), pages=82944
+  NUMA 0: 20736 pages (25%)
+  NUMA 1: 20736 pages (25%)
+  NUMA 2: 20736 pages (25%)
+  NUMA 3: 20736 pages (25%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Buffer A.ptr_to_diags: size=339738624 B (324 MiB), pages=82944
+  NUMA 0: 20736 pages (25%)
+  NUMA 1: 20736 pages (25%)
+  NUMA 2: 20736 pages (25%)
+  NUMA 3: 20736 pages (25%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Buffer x: size=339738624 B (324 MiB), pages=82944
+  NUMA 0: 20736 pages (25%)
+  NUMA 1: 20736 pages (25%)
+  NUMA 2: 20736 pages (25%)
+  NUMA 3: 20736 pages (25%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Buffer b: size=339738624 B (324 MiB), pages=82944
+  NUMA 0: 20736 pages (25%)
+  NUMA 1: 20736 pages (25%)
+  NUMA 2: 20736 pages (25%)
+  NUMA 3: 20736 pages (25%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Buffer xexact: size=339738624 B (324 MiB), pages=82944
+  NUMA 0: 20736 pages (25%)
+  NUMA 1: 20736 pages (25%)
+  NUMA 2: 20736 pages (25%)
+  NUMA 3: 20736 pages (25%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Buffer A.list_of_vals: size=9172942848 B (8748 MiB), pages=2239488
+  NUMA 0: 555671 pages (24.8124%)
+  NUMA 1: 556636 pages (24.8555%)
+  NUMA 2: 556637 pages (24.8555%)
+  NUMA 3: 555670 pages (24.8124%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+  NUMA unknown: 14874 pages (0.66417%)
+[Rank 0] Buffer A.list_of_inds: size=9172942848 B (8748 MiB), pages=2239488
+  NUMA 0: 555671 pages (24.8124%)
+  NUMA 1: 556636 pages (24.8555%)
+  NUMA 2: 556637 pages (24.8555%)
+  NUMA 3: 555670 pages (24.8124%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+  NUMA unknown: 14874 pages (0.66417%)
+[Rank 0] Buffer debug_map: size=2038431744 B (1944 MiB), pages=497664
+  NUMA 0: 0 pages (0%)
+  NUMA 1: 0 pages (0%)
+  NUMA 2: 497664 pages (100%)
+  NUMA 3: 0 pages (0%)
+  NUMA 4: 0 pages (0%)
+  NUMA 5: 0 pages (0%)
+  NUMA 6: 0 pages (0%)
+  NUMA 7: 0 pages (0%)
+[Rank 0] Total tracked buffer size: 22592618496 B (21.041 GiB)
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 429377, Thread 135344787797696] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+taskSize=442368
+BS_FACTOR=4
+srun: Received task exit notification for 1 task of StepId=52348.0 (status=0x0000).
+srun: fox: task 0: Completed

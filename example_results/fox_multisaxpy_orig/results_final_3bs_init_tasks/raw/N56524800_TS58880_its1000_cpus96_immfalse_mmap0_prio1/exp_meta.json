@@ -1,0 +1,6 @@
+{
+    "experiment": "N56524800_TS58880_its1000_cpus96_immfalse_mmap0_prio1",
+    "imm": "false", "mmap": 0, "prio": 1,
+    "N": 56524800, "TS": 58880, "iterations": 1000,
+    "cpus": 96, "ppn": 1
+}

@@ -1,0 +1,6 @@
+{
+    "experiment": "n49152_bs512_its60_lowercs_uppernuma_flex1",
+    "n": 49152, "bs": 512, "its": 60,
+    "diags": 1, "prio": 0, "bf": 0, "tge": 1,
+    "lower": "cs", "upper": "numa", "flex": 1, "policy": "PRIO"
+}

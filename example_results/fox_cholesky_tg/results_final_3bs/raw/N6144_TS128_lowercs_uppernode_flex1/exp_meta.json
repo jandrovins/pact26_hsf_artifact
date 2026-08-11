@@ -1,0 +1,7 @@
+{
+    "experiment": "N6144_TS128_lowercs_uppernode_flex1",
+    "N": 6144, "TS": 128,
+    "lower": "cs", "upper": "node", "affflex": 1,
+    "useprio": 1, "gemmtpb": 768, "tgenabled": 1,
+    "imm": "false", "ppn": 1, "mmap": 1
+}

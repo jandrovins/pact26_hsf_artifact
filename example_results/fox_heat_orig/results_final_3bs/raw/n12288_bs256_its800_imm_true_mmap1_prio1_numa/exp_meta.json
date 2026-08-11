@@ -1,0 +1,5 @@
+{
+    "experiment": "n12288_bs256_its800_imm_true_mmap1_prio1_numa",
+    "n": 12288, "bs": 256, "its": 800,
+    "imm": "true", "mmap": 1, "prio": 1, "numa": ""
+}

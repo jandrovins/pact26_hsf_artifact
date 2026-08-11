@@ -1,0 +1,74 @@
+srun: Setting --cpu-bind=threads,verbose as a default of --threads-per-core use
+srun: Updating SLURM_TRES_PER_TASK to cpu=192 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : verbose
+srun: cpus-per-task       : 192
+srun: exclusive           : exclusive
+srun: jobid               : 52317
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=192
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52317: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,threads
+srun: launching StepId=52317.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [407458]: mask 0xffffffffffffffffffffffffffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+NUMA interleaved allocation on nodes: 0 1 2 3 4 5 6 7
+NUMA page distribution for list_of_vals (11943936 pages, page_size=4096):
+  NUMA node 0: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 1: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 2: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 3: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 4: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 5: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 6: 1487166 pages (12.45%)  (6091431936 bytes)
+  NUMA node 7: 1487166 pages (12.45%)  (6091431936 bytes)
+NUMA page distribution for list_of_inds (11943936 pages, page_size=4096):
+  NUMA node 0: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 1: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 2: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 3: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 4: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 5: 1487167 pages (12.45%)  (6091436032 bytes)
+  NUMA node 6: 1487166 pages (12.45%)  (6091431936 bytes)
+  NUMA node 7: 1487166 pages (12.45%)  (6091431936 bytes)
+NUMA page distribution for x (442368 pages, page_size=4096):
+  NUMA node 0: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 1: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 2: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 3: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 4: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 5: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 6: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 7: 55296 pages (12.50%)  (226492416 bytes)
+NUMA page distribution for b (442368 pages, page_size=4096):
+  NUMA node 0: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 1: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 2: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 3: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 4: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 5: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 6: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 7: 55296 pages (12.50%)  (226492416 bytes)
+NUMA page distribution for xexact (442368 pages, page_size=4096):
+  NUMA node 0: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 1: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 2: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 3: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 4: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 5: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 6: 55296 pages (12.50%)  (226492416 bytes)
+  NUMA node 7: 55296 pages (12.50%)  (226492416 bytes)
+taskSize=24576
+srun: Received task exit notification for 1 task of StepId=52317.0 (status=0x0000).
+srun: fox: task 0: Completed

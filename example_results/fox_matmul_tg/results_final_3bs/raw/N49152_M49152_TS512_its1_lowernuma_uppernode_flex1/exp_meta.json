@@ -1,0 +1,9 @@
+{
+    "experiment": "N49152_M49152_TS512_its1_lowernuma_uppernode_flex1",
+    "N": 49152, "M": 49152, "TS": 512,
+    "tgenabled": 1, "hier": 0,
+    "lower": "numa", "upper": "node", "affflex": 1,
+    "imm": "false", "ppn": 1, "mmap": 1,
+    "forcenb": 1, "hwc": "none", "l3": 96,
+    "its": 1
+}

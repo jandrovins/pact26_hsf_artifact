@@ -1,0 +1,11 @@
+kernel.c:27:3: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+   27 |                 #pragma omp simd
+      |                 ^
+kernel.c:35:3: remark: the cost-model indicates that interleaving is not beneficial [-Rpass-analysis=loop-vectorize]
+   35 |                 #pragma omp simd
+      |                 ^
+kernel.c:63:14: remark: loop not vectorized: unsafe dependent memory operations in loop. Use #pragma clang loop distribute(enable) to allow loop distribution to attempt to isolate the offending operations into a separate loop
+Unknown data dependence. Memory location is the same as accessed at kernel.c:63:21 [-Rpass-analysis=loop-vectorize]
+   63 |                         *max_elem = fmax(*max_elem, fabs(new));
+      |                                   ^
+NUMA interleaved subset nodes: 0 1 2 3

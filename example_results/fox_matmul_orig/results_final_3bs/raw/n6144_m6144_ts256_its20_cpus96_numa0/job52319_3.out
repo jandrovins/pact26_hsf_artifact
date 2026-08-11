@@ -1,0 +1,15 @@
+=== Matmul nosvorig: N=6144 M=6144 TS=256 ITS=20 ===
+[TIMING] before nix develop: 11:29:11.627370320
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  NODES_HOME=/nix/store/c07kvghf5gm7zib1zdzkk21y8z77icyb-nodes-1.4.0
+  NOSV_HOME=/nix/store/nxsh19kbfdz9krm5n7yf6g072zjiwyqa-nosv-4.0.0
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+[TIMING] inside nix shell: 11:29:14.277165534
+[TIMING] after build check: 11:29:14.279901046
+Printing result   2.603300e+00 6144 6144 20 256   3.563604e+03
+[TIMING] after srun: 11:29:17.952750386
+[TIMING] after nix develop exit: 11:29:17.957057347

@@ -1,0 +1,6 @@
+{
+    "experiment": "n49152_m49152_ts512_its1_cpus192_numa0",
+    "imm": "true", "ppn": 1, "cpuspertask": 192,
+    "nsize": 49152, "msize": 49152, "ts": 512,
+    "its": 1, "mmap": 1, "numa": 0
+}

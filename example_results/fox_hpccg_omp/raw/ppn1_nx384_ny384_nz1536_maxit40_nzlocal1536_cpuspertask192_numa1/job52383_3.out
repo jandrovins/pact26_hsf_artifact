@@ -1,0 +1,63 @@
+=== HPCCG baseline: nx=384 ny=384 nzlocal=1536 maxit=40 ppn=1 cpus=192 numa=1 ===
+[TIMING] before nix develop: 15:17:52.659025420
+Environment variables set:
+  CC=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang
+  CXX=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang++
+  BLIS_HOME=/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/16cj32h5mdv4aqbd12ncngih2906x308-amd-libflame-5.1
+[TIMING] inside nix shell: 15:17:55.578639808
+[TIMING] after build check: 15:17:55.581360741
+NUMA interleaved subset nodes: 0 1 2 3 4 5 6 7
+NUMA interleaved subset nodes: 0 1 2 3 4 5 6 7
+Initial Residual = 22131.1
+Iteration = 4   Residual = 20854.8
+Iteration = 8   Residual = 3347.6
+Iteration = 12   Residual = 757.739
+Iteration = 16   Residual = 195.396
+Iteration = 20   Residual = 51.5983
+Iteration = 24   Residual = 13.6708
+Iteration = 28   Residual = 3.6234
+Iteration = 32   Residual = 0.960384
+Iteration = 36   Residual = 0.254547
+Iteration = 39   Residual = 0.0940278
+Mini-Application Name: hpccg
+Mini-Application Version: 1.0
+Parallelism: 
+  Number of MPI ranks: 1
+  Number of OpenMP threads: 192
+Dimensions: 
+  nx: 384
+  ny: 384
+  nz: 1536
+Number of iterations: 39
+Final residual: 0.0940278
+#********** Performance Summary (times in sec) ***********: 
+Time Summary: 
+  Total   : 13.3586
+  DDOT    : 0.534557
+  WAXPBY  : 1.3112
+  SPARSEMV: 10.9728
+FLOPS Summary: 
+  Total   : 5.65325e+11
+  DDOT    : 3.53328e+10
+  WAXPBY  : 5.29992e+10
+  SPARSEMV: 4.76993e+11
+MFLOPS Summary: 
+  Total   : 42319.2
+  DDOT    : 66097.4
+  WAXPBY  : 40420.5
+  SPARSEMV: 43470.7
+DDOT Timing Variations: 
+  Min DDOT MPI_Allreduce time: 0.000106566
+  Max DDOT MPI_Allreduce time: 0.000106566
+  Avg DDOT MPI_Allreduce time: 0.000106566
+SPARSEMV OVERHEADS: 
+  SPARSEMV MFLOPS W OVERHEAD: 26589.8
+  SPARSEMV PARALLEL OVERHEAD Time: 6.96622
+  SPARSEMV PARALLEL OVERHEAD Pct: 38.8329
+  SPARSEMV PARALLEL OVERHEAD Setup Time: 6.9661
+  SPARSEMV PARALLEL OVERHEAD Setup Pct: 38.8322
+  SPARSEMV PARALLEL OVERHEAD Bdry Exch Time: 0.000122247
+  SPARSEMV PARALLEL OVERHEAD Bdry Exch Pct: 0.00068146
+[TIMING] after srun: 15:19:11.567251604
+[TIMING] after nix develop exit: 15:19:11.574189160

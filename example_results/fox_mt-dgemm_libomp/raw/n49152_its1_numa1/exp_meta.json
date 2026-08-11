@@ -1,0 +1,5 @@
+{
+    "experiment": "n49152_its1_numa1",
+    "ppn": 1, "cpuspertask": 192, "nsize": 49152, "msize": 49152,
+    "its": 1, "numa": 1
+}

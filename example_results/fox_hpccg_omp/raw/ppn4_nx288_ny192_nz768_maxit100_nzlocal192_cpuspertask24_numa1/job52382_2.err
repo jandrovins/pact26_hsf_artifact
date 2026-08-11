@@ -1,0 +1,30 @@
+srun: Setting --cpu-bind=threads,verbose as a default of --threads-per-core use
+srun: Updating SLURM_TRES_PER_TASK to cpu=24 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : verbose
+srun: cpus-per-task       : 24
+srun: exclusive           : exclusive
+srun: jobid               : 52599
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 4
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=24
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52599: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,threads
+srun: launching StepId=52599.0 on host fox, 4 tasks: [0-3]
+cpu-bind=MASK - fox, task  0  0 [559408]: mask 0xffffff set
+cpu-bind=MASK - fox, task  1  1 [559409]: mask 0xffffff000000 set
+cpu-bind=MASK - fox, task  2  2 [559410]: mask 0xffffff000000000000 set
+cpu-bind=MASK - fox, task  3  3 [559411]: mask 0xffffff000000000000000000 set
+srun: Node fox, 4 tasks started
+srun: Received task exit notification for 4 tasks of StepId=52599.0 (status=0x0000).
+srun: fox: tasks 0-3: Completed

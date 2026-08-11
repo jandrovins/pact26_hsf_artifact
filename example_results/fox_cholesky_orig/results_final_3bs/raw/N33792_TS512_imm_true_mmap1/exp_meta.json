@@ -1,0 +1,7 @@
+{
+    "experiment": "N33792_TS512_imm_true_mmap1",
+    "N": 33792, "TS": 512,
+    "lower": "node", "upper": "node", "affflex": 0,
+    "useprio": 0, "gemmtpb": 48, "tgenabled": 0,
+    "imm": "true", "ppn": 1, "mmap": 1
+}

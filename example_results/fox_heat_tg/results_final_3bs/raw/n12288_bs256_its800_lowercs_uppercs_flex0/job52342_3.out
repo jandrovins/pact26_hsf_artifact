@@ -1,0 +1,20 @@
+=== Heat HSF: N=12288 BS=256 ITS=800 ===
+VVV_TG_ENABLED=1 VVV_LOWER_LVL=cs VVV_UPPER_LVL=cs
+[TIMING] before nix develop: 12:22:02.926048173
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  PAPI_HOME=/nix/store/lrhn2sdjgmbsjb22kk5rsaysr419rnly-papi-7.2.0
+  OVNI_HOME=/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0
+  NODES_HOME=/nix/store/g84v80gmx1mhshfddqxs9lbqrvcf8xcv-nodes-haffsched-debug2
+  NOSV_HOME=/nix/store/y1hg258pxa0lxg78vqvxisvffygnbnxh-nosv-haffsched-local-hwc-counters
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1
+  TGLIB_HOME=/nix/store/rb92fylnlkc1jfs01an1awzc9i5zggnh-tglib-d78d0a4
+[TIMING] inside nix shell: 12:22:04.435312301
+[TIMING] after build check: 12:22:04.437942012
+Starting Heat Solver with OmpSs-2
+      1.145796 fake_exec:       5.216435   2.315680e+10   0.000000e+00    12288    12288      256      256      800 resultstring
+[TIMING] after srun: 12:22:10.686793954
+[TIMING] after nix develop exit: 12:22:10.691741020

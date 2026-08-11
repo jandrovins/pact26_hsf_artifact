@@ -1,0 +1,58 @@
+=== HPCCG HSF: nx=384 ny=384 nz=1536 ntasks=9216 ===
+VVV_TG_ENABLED=1 VVV_LOWER_LVL=cs
+VVV_SPMV_TG_ENABLED=1 VVV_SPMV_POLICY=FIFO
+[TIMING] before nix develop: 12:55:20.373638947
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  PAPI_HOME=/nix/store/lrhn2sdjgmbsjb22kk5rsaysr419rnly-papi-7.2.0
+  OVNI_HOME=/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0
+  NODES_HOME=/nix/store/g84v80gmx1mhshfddqxs9lbqrvcf8xcv-nodes-haffsched-debug2
+  NOSV_HOME=/nix/store/y1hg258pxa0lxg78vqvxisvffygnbnxh-nosv-haffsched-local-hwc-counters
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1
+  TGLIB_HOME=/nix/store/rb92fylnlkc1jfs01an1awzc9i5zggnh-tglib-d78d0a4
+[TIMING] inside nix shell: 12:55:22.451728310
+[TIMING] after build check: 12:55:22.456922991
+Process ID: 432391, Rank: 0, Host: fox
+11. r --- Sizeof double*nrow: 1811939328
+12. p --- Sizeof double*ncol: 1811939328
+13. Ap --- Sizeof double*nrow: 1811939328
+14. blk_info_array --- Sizeof Blk_info*num_blocks: 73728
+15. deps --- Sizeof bool*ncol: 226492416
+16. dep_idx_list --- Sizeof int*27*(num_blocks): 995328
+17. dep_ptr_to_idx_list --- Sizeof (int *)*num_blocks: 73728
+18. dep_size --- Sizeof int*num_blocks: 36864
+Total memory allocated: 5663490048
+--------------- ALLOCATIONS ---------------
+NUM_PART: 4 || nrow: 226492416 || cpus: 192 || chunk: 24576 || num_blocks: 9216
+Initial Residual = 22131.1
+fniters: 40
+fnrow: 2.26492e+08
+fnnz: 6.1153e+09
+fnops_ddot: 3.62388e+10
+fnops_waxpby: 5.43582e+10
+fnops_sparsemv: 4.89224e+11
+fnops: 5.79821e+11
+Mini-Application Name: hpccg_ompss_ranks1_nx384_ny384_nz1536_maxiter40_ntasks9216_nthreads192
+Mini-Application Version: 1.0
+Parallelism: 
+  Number of MPI ranks: 1
+  Number of OmpSs cores: 192
+Dimensions: 
+  nx: 384
+  ny: 384
+  nz: 1536
+Number of iterations: 40
+Final residual: 0.0940278
+#********** Performance Summary (times in sec) ***********: 
+Time Summary: 
+  Total   : 7.64314
+FLOPS Summary: 
+  Total   : 5.79821e+11
+MFLOPS Summary: 
+  Total   : 75861.5
+time,7.643145,nx,384,ny,384,nz,1536,ranks,1,threads,192,ntasks,9216,iterations,40,flops,579820584960.000000,mflops,75861.521594,total_mem(bytes),5663490048
+[TIMING] after srun: 13:09:26.733656683
+[TIMING] after nix develop exit: 13:09:26.739684360

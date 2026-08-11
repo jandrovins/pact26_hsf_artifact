@@ -1,0 +1,6 @@
+{
+    "experiment": "n12288_bs768_its800_lowercs_uppercs_flex0",
+    "n": 12288, "bs": 768, "its": 800,
+    "diags": 1, "prio": 0, "bf": 0, "tge": 1,
+    "lower": "cs", "upper": "cs", "flex": 0, "policy": "PRIO"
+}

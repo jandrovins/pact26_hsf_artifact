@@ -1,0 +1,2 @@
+valloc: allocation mode = malloc
+VALLOC: [Proc 552451, Thread 140737352676608] ALLOC malloc: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0

@@ -1,0 +1,70 @@
+In file included from src/common/main.cpp:88:
+In file included from include/HPCCG.hpp:50:
+include/exchange_externals.hpp:52:10: warning: USING_INTEROP not defined but defined USING_MPI. This is valid [-W#pragma-messages]
+   52 |         #pragma message ("USING_INTEROP not defined but defined USING_MPI. This is valid")
+      |                 ^
+In file included from src/common/exchange_externals.cpp:59:
+include/exchange_externals.hpp:52:10: warning: USING_INTEROP not defined but defined USING_MPI. This is valid [-W#pragma-messages]
+   52 |         #pragma message ("USING_INTEROP not defined but defined USING_MPI. This is valid")
+      |                 ^
+In file included from src/mpi_interop_ompss/HPCCG.cpp:69:
+In file included from include/HPCCG.hpp:50:
+include/exchange_externals.hpp:52:10: warning: USING_INTEROP not defined but defined USING_MPI. This is valid [-W#pragma-messages]
+   52 |         #pragma message ("USING_INTEROP not defined but defined USING_MPI. This is valid")
+      |                 ^
+src/mpi_interop_ompss/HPCCG.cpp:91:10: warning: Using OmpSs-2 (defined USING_INTEROP and USING_OSS) [-W#pragma-messages]
+   91 |         #pragma message ("Using OmpSs-2 (defined USING_INTEROP and USING_OSS)")
+      |                 ^
+src/mpi_interop_ompss/HPCCG.cpp:101:10: warning: USING_INTEROP not defined but defined USING_MPI. This is valid [-W#pragma-messages]
+  101 |         #pragma message ("USING_INTEROP not defined but defined USING_MPI. This is valid")
+      |                 ^
+1 warning generated.
+1 warning generated.
+3 warnings generated.
+srun: Setting --cpu-bind=threads,verbose as a default of --threads-per-core use
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : verbose
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 52444
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52444: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,threads
+srun: launching StepId=52444.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [399078]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+valloc: allocation mode = mmap
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 399078, Thread 130221546116800] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+taskSize=442368
+srun: Received task exit notification for 1 task of StepId=52444.0 (status=0x0000).
+srun: fox: task 0: Completed
