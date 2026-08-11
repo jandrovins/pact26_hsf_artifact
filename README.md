@@ -155,8 +155,9 @@ This parses the SLURM `*.out` files and writes a `summary.csv` under each
 
 A **reference copy** of the authors' full Genoa-X run (`HSF_ARCH=znver4`,
 `NREPS=3`) ships in `example_results/`, mirroring the `reproduced_results/`
-layout. Inspect it to see the expected outputs, or regenerate its `summary.csv`
-files without a cluster run:
+layout and also including the `oss_overhead/` Sched-Stress sweep CSVs (under
+`example_results/oss_overhead/{hsf,nosvorig}/`). Inspect it to see the expected
+outputs, or regenerate the benchmark `summary.csv` files without a cluster run:
 
 ```bash
 python collect_results.py --results-dir example_results
