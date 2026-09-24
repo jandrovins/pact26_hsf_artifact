@@ -1,5 +1,5 @@
 {
-	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib&rev=bb3e589d3458fe1983e8284af882af786572de15";
+	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib&rev=dfc4fd0dc5054d2483c027b715bee3a7cff90b20";
 	inputs.nodes_src.url = "git+https://github.com/jandrovins/nodes-haffsched.git";
 	inputs.nodes_src.flake = false;
 	inputs.nosv_src.url = "git+https://github.com/jandrovins/nos-v-haffsched.git?ref=hwc-perf-analysis&rev=f6c19c404b0d1b042a79492479259af195b375ef";
