@@ -15,6 +15,7 @@
       },
       "original": {
         "ref": "tglib",
+        "rev": "dfc4fd0dc5054d2483c027b715bee3a7cff90b20",
         "type": "git",
         "url": "https://github.com/jandrovins/jungle.git"
       }

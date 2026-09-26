@@ -5,17 +5,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1769612627,
-        "narHash": "sha256-GgEsBsLTSWWhnBHxUQxskRCobJzX12LaGjWwItr/p5Y=",
+        "lastModified": 1773397208,
+        "narHash": "sha256-zRGiEmm0RWsXsyzFO9M08wOchu1JfoqcQwJ8W8tYiNM=",
         "ref": "tglib",
-        "rev": "bb3e589d3458fe1983e8284af882af786572de15",
-        "revCount": 1535,
+        "rev": "dfc4fd0dc5054d2483c027b715bee3a7cff90b20",
+        "revCount": 1536,
         "type": "git",
         "url": "https://github.com/jandrovins/jungle.git"
       },
       "original": {
         "ref": "tglib",
-        "rev": "bb3e589d3458fe1983e8284af882af786572de15",
+        "rev": "dfc4fd0dc5054d2483c027b715bee3a7cff90b20",
         "type": "git",
         "url": "https://github.com/jandrovins/jungle.git"
       }

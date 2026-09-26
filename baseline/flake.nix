@@ -1,5 +1,5 @@
 {
-	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib";
+	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib&rev=dfc4fd0dc5054d2483c027b715bee3a7cff90b20";
 	outputs = { self, jungle }:
 	let
 	# Target architecture. Defaults to a portable build; set HSF_ARCH=znver4 on

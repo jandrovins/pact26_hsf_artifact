@@ -1,5 +1,5 @@
 {
-	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib&rev=bb3e589d3458fe1983e8284af882af786572de15";
+	inputs.jungle.url = "git+https://github.com/jandrovins/jungle.git?ref=tglib&rev=dfc4fd0dc5054d2483c027b715bee3a7cff90b20";
 	inputs.nodes_src.url = "https://github.com/bsc-pm/nodes/releases/download/version-1.4/nodes-1.4.0.tar.gz";
 	inputs.nodes_src.flake = false;
 	inputs.nosv_src.url = "https://github.com/bsc-pm/nos-v/releases/download/4.0.0/nos-v-4.0.0.tar.bz2";

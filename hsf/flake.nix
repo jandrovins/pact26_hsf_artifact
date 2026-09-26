@@ -18,8 +18,11 @@
 
 	# tglib from the author's public GitHub over HTTPS (jungle's default gitUrl
 	# is SSH). Applied as an overlay so both buildInputs and TGLIB_HOME use it.
+	# Called directly rather than via `prev.tglib.override`: jungle's tglib takes
+	# its version from the fetched source, so evaluating the default (needed to
+	# override it) would already fetch over SSH.
 	tglibOverlay = final: prev: {
-		tglib = prev.tglib.override {
+		tglib = final.callPackage "${jungle}/pkgs/tglib" {
 			gitUrl = "https://github.com/jandrovins/tglib.git";
 			gitBranch = "main";
 			gitCommit = "d78d0a4463385344e07ef265881a670ceda04823";
