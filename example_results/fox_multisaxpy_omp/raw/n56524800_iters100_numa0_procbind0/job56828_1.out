@@ -1,0 +1,14 @@
+=== Multisaxpy baseline: N=56524800 ITS=100 CPUS=96 NUMA=0 PROCBIND=0 ===
+[TIMING] before nix develop: 02:36:58.449454693
+Environment variables set:
+  CC=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang
+  CXX=/nix/store/bpmq0ln49bp0iak5xlmqgib0vlywz64n-clang-wrapper-21.1.2/bin/clang++
+  BLIS_HOME=/nix/store/d3gl28i7m8bxyla9vhgdn5nwjnjip4b6-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/16cj32h5mdv4aqbd12ncngih2906x308-amd-libflame-5.1
+[TIMING] inside nix shell: 02:38:32.938157274
+Building multisaxpy_smp...
+clang++ -O3 -g -fopenmp -DBENCH6_NAME=\"multisaxpy_smp\" -o multisaxpy_smp multisaxpy-smp.cpp -lnuma
+[TIMING] after build check: 02:38:33.583340311
+  5.430110e-01   2.081903e+01       56524800            NaN            100 multisaxpy_smp
+[TIMING] after run: 02:38:35.113270646
+[TIMING] after nix develop exit: 02:38:35.117521452

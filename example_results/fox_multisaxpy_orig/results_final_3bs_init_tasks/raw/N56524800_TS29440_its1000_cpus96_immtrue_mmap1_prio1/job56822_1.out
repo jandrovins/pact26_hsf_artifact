@@ -1,0 +1,17 @@
+=== Multisaxpy nosvorig: N=56524800 TS=29440 its=1000 ===
+[TIMING] before nix develop: 02:29:02.165097674
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  NODES_HOME=/nix/store/c07kvghf5gm7zib1zdzkk21y8z77icyb-nodes-1.4.0
+  NOSV_HOME=/nix/store/nxsh19kbfdz9krm5n7yf6g072zjiwyqa-nosv-4.0.0
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+[TIMING] inside nix shell: 02:30:20.272723768
+Building b6_multisaxpy_prio...
+clang++ -O3 -DSIMD -D_POSIX_C_SOURCE=200809L -DNDEBUG -fopenmp-simd -fompss-2=libnodes -I/include -std=c++17 multisaxpy-prio.cpp -o b6_multisaxpy_prio -pthread -lm -ldl -lpthread -L/lib -lovni -lnuma -lvalloc
+[TIMING] after build check: 02:30:20.781813845
+  1.072450e+01   1.054125e+01       56524800          29440           1000 result_multisaxpy
+[TIMING] after srun: 02:30:41.454672370
+[TIMING] after nix develop exit: 02:30:41.459162091

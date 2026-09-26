@@ -1,0 +1,82 @@
+warning: unable to download 'http://tent/cache/nix-cache-info': Timeout was reached (28) Connection timed out after 3000 milliseconds; retrying in 316 ms (attempt 1/5)
+warning: unable to download 'http://tent/cache/nix-cache-info': Timeout was reached (28) Connection timed out after 3000 milliseconds; retrying in 516 ms (attempt 2/5)
+warning: unable to download 'http://tent/cache/nix-cache-info': Timeout was reached (28) Connection timed out after 3001 milliseconds; retrying in 1057 ms (attempt 3/5)
+warning: unable to download 'http://tent/cache/nix-cache-info': Timeout was reached (28) Connection timed out after 3000 milliseconds; retrying in 2017 ms (attempt 4/5)
+warning: unable to download 'http://tent/cache/nix-cache-info': Timeout was reached (28) Connection timed out after 3000 milliseconds
+unpacking 'https://github.com/bsc-pm/nos-v/releases/download/4.0.0/nos-v-4.0.0.tar.bz2' into the Git cache...
+unpacking 'https://github.com/bsc-pm/nodes/releases/download/version-1.4/nodes-1.4.0.tar.gz' into the Git cache...
+copying path '/nix/store/p8543cx30b5k81zffl60nsnyn64lrqn5-cmake-cursesUI-4.1.2' from 'https://cache.nixos.org'...
+copying path '/nix/store/6mrkwprlk3j91bl80ngl1mjz0n3sknk2-zsh-5.9' from 'https://cache.nixos.org'...
+copying path '/nix/store/ixlrqpcz6k5b886qcyc25gkcl36375ci-glibc-gd-2.40-66' from 'https://cache.nixos.org'...
+building '/nix/store/dmyhiwbqhai8wy86ws8fbjzf62v2lnn9-nosv-4.0.0.drv'...
+building '/nix/store/65m60v0fq8h0z1a8h5b61kvyvnl891g5-valloc-7fb59c2.drv'...
+copying path '/nix/store/qxnb3md1xb2j2z1vf94xhfzzivxj7dzs-glibc-gd-2.40-66-bin' from 'https://cache.nixos.org'...
+copying path '/nix/store/4gzjszzxhizc1n48cj0bgsvr0cqrqnl1-glibc-gd-2.40-66-dev' from 'https://cache.nixos.org'...
+building '/nix/store/jbfx78ad3a75zi9mpvj8f5f6vd6x8226-nodes-1.4.0.drv'...
+building '/nix/store/g98fwbcyg2j4zz276iqvrcavg3w6r44w-nix-shell-env.drv'...
+srun: Setting --cpu-bind=threads,verbose as a default of --threads-per-core use
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : verbose
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 56848
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 56848: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,threads
+srun: launching StepId=56848.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [3401762]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+Using configuration file nosv.toml
+Parsed options: 
+scheduler.quantum_ns = 20000000
+scheduler.queue_batch = 64
+scheduler.cpus_per_queue = 1
+scheduler.in_queue_size = 256
+scheduler.immediate_successor = 1
+shared_memory.name = "nosv"
+shared_memory.isolation_level = "process"
+shared_memory.start = 0x200000000000
+shared_memory.size = 34359738368
+task_affinity.default = "all"
+task_affinity.default_policy = "strict"
+thread_affinity.compat_support = 1
+topology.binding = "0-95"
+topology.numa_nodes = "(null)"
+topology.complex_sets = "(null)"
+topology.print = 0
+debug.dump_config = 1
+debug.print_binding = 1
+governor.policy = "hybrid"
+governor.spins = 10000
+hwcounters.verbose = 0
+hwcounters.backend = "none"
+hwcounters.papi_events = ["PAPI_TOT_INS","PAPI_TOT_CYC"]
+turbo.enabled = 1
+monitoring.enabled = 0
+monitoring.verbose = 0
+instrumentation.version = "none"
+misc.stack_size = 8388608
+ovni.level = 3
+ovni.events = []
+ovni.kernel_ringsize = 4194304
+NOS-V WARNING in topo_init(): Binding parsed from config: 0-95
+valloc: allocation mode = mmap
+VALLOC: [Proc 3401762, Thread 123125217879744] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 3401762, Thread 123125217879744] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+VALLOC: [Proc 3401762, Thread 123125217879744] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+VALLOC: [Proc 3401762, Thread 123125217879744] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+srun: Received task exit notification for 1 task of StepId=56848.0 (status=0x0000).
+srun: fox: task 0: Completed

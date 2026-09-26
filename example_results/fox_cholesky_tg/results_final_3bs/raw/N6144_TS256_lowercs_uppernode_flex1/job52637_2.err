@@ -1,0 +1,88 @@
+srun: Updating SLURM_TRES_PER_TASK to cpu=96 as --cpus-per-task takes precedence over the environment variables.
+srun: Following options are mutually exclusive with --hint: --ntasks-per-core, --cores-per-socket, --threads-per-core, --sockets-per-node, -B and --cpu-bind (other than --cpu-bind=verbose). Ignoring --hint.
+srun: defined options
+srun: -------------------- --------------------
+srun: (null)              : fox
+srun: cpu-bind            : (null)
+srun: cpus-per-task       : 96
+srun: exclusive           : exclusive
+srun: jobid               : 52647
+srun: job-name            : submit_reproduce.job
+srun: mem-per-cpu         : 4008
+srun: nodes               : 1
+srun: ntasks-per-node     : 1
+srun: oom-kill-step       : 0
+srun: threads-per-core    : 1
+srun: tres-per-task       : cpu=96
+srun: verbose             : 1
+srun: -------------------- --------------------
+srun: end of defined options
+srun: jobid 52647: nodes(1):`fox', cpu counts: 192(x1)
+srun: CpuBindType=verbose,none
+srun: launching StepId=52647.0 on host fox, 1 tasks: 0
+cpu-bind=MASK - fox, task  0  0 [592321]: mask 0xffffffffffffffffffffffff set
+srun: Node fox, 1 tasks started
+Using configuration file nosv.toml
+Parsed options: 
+scheduler.quantum_ns = 20000000
+scheduler.queue_batch = 64
+scheduler.cpus_per_queue = 1
+scheduler.in_queue_size = 256
+scheduler.immediate_successor = 0
+scheduler.tg_caching = 1
+shared_memory.name = "nosv"
+shared_memory.isolation_level = "process"
+shared_memory.start = 0x200000000000
+shared_memory.size = 8589934592
+thread_affinity.compat_support = 1
+topology.binding = "inherit"
+topology.numa_nodes = "(null)"
+topology.complex_sets = "№укY"
+topology.print = 0
+debug.dump_config = 1
+debug.print_binding = 1
+governor.policy = "hybrid"
+governor.spins = 10000
+hwcounters.verbose = 0
+hwcounters.backend = "none"
+hwcounters.papi_events = ["PAPI_TOT_INS","PAPI_TOT_CYC","PAPI_L1_DCM"]
+hwcounters.output_file = "hwc_stats.csv"
+hwcounters.task_filter = "all"
+turbo.enabled = 1
+instrumentation.version = "none"
+misc.stack_size = 8388608
+ovni.level = 2
+ovni.events = ["basic","task","scheduler","hwc"]
+ovni.kernel_ringsize = 4194304
+root_sched.policy = "PRIO_AFF"
+root_sched.default_affinity = "all"
+app_sched.policy = "PRIO_AFF"
+app_sched.default_affinity = "inherit"
+app_sched.priority = 0
+proc_sched.appid = 0
+proc_sched.policy = "PRIO_AFF"
+proc_sched.default_affinity = "inherit"
+proc_sched.priority = 0
+taskgroups.save_hierarchy = 0
+taskgroups.dot_filename = "taskgroup_hierarchy.dot"
+NOS-V WARNING in ./src/include/scheduler/cpubitset.h:264:cpu_bitset_print_mask(): Effective binding: {0-95}
+VVV_UPPER_LVL set to: node
+VVV_LOWER_LVL set to: cs
+VVV_TG_POLICY set to: PRIO (default)
+VVV_TG_ENABLED effective value: 1
+VVV_AFF_FLEXIBLE effective value: 1
+VVV_TG_ENABLED set to: 1 (enabled)
+tglib_manager values:
+  tg_enabled      = 1
+  upper_level     = 0
+  lower_level     = 2
+  sched_policy    = 5
+  flexible_aff    = 1
+  num_task_groups = 0
+  taskgroups ptr  = (nil)
+[Proc 592321, Thread 124802186589888] BEFORE mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=0 addr_nodemask=0x0
+[Proc 592321, Thread 124802186589888] AFTER  mbind: thread_policy=0 thread_nodemask=0x0 addr_policy=4 addr_nodemask=0x0
+INFO: tglib_create_taskgroups_per_domain: num_doms = 12 lower_level=2
+INFO: tglib_create_taskgroups_per_domain: Creating 12 task groups
+srun: Received task exit notification for 1 task of StepId=52647.0 (status=0x0000).
+srun: fox: task 0: Completed

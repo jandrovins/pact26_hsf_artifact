@@ -1,0 +1,65 @@
+=== Cholesky HSF: N=33792 TS=256 ===
+VVV_TG_ENABLED=1
+VVV_LOWER_LVL=numa
+VVV_UPPER_LVL=numa
+VVV_AFF_FLEXIBLE=0
+NOSV_CONFIG_OVERRIDE=topology.binding=inherit,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false,instrumentation.version=none
+[TIMING] before nix develop: 11:03:50.812730706
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  PAPI_HOME=/nix/store/lrhn2sdjgmbsjb22kk5rsaysr419rnly-papi-7.2.0
+  OVNI_HOME=/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0
+  NODES_HOME=/nix/store/g84v80gmx1mhshfddqxs9lbqrvcf8xcv-nodes-haffsched-debug2
+  NOSV_HOME=/nix/store/y1hg258pxa0lxg78vqvxisvffygnbnxh-nosv-haffsched-local-hwc-counters
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1
+  TGLIB_HOME=/nix/store/rb92fylnlkc1jfs01an1awzc9i5zggnh-tglib-d78d0a4
+[TIMING] inside nix shell: 11:03:53.113942180
+[TIMING] after build check: 11:03:53.116883214
+VVV_CHOL_PRIORITY_ENABLED is set to 1
+Matrix size: 9135194112 bytes
+Matrix dimensions: 33792 x 33792
+=== Column RR TG Mapping (potrf/trsm/syrk) ===
+  nblocks_per_dim = 132
+  Num TGs         = 8
+  Policy          = PRIO
+================================================
+=== GEMM TG Pool: DISABLED (VVV_CHOL_GEMM_TG!=1) ===
+  GEMMs use the column round-robin taskgroups (by output column).
+====================
+=== GEMM Priority Overflow Check ===
+Matrix size N = 33792, Tile size TS = 256
+Number of blocks per dimension: 132
+Maximum k term (1e4 * nblocks): 1320000
+Maximum j term (1e3 * (nblocks - 1)): 131000
+Maximum i term (nblocks - 1): 131
+Maximum gemm_prio value: 1451131
+INT_MAX: 2147483647
+INFO: No overflow detected. gemm_prio is safe.
+====================================
+
+NUMA page distribution for matrix a (2230272 pages, page_size=4096):
+  NUMA node 0: 287232 pages (12.88%)
+  NUMA node 1: 287232 pages (12.88%)
+  NUMA node 2: 287232 pages (12.88%)
+  NUMA node 3: 287232 pages (12.88%)
+  NUMA node 4: 270336 pages (12.12%)
+  NUMA node 5: 270336 pages (12.12%)
+  NUMA node 6: 270336 pages (12.12%)
+  NUMA node 7: 270336 pages (12.12%)
+Warmup cholesky duration:   7.000000e-08 seconds
+VVV_TG_ENABLED is set to 1, running cholesky
+NUMA page distribution for matrix a (2230272 pages, page_size=4096):
+  NUMA node 0: 287232 pages (12.88%)
+  NUMA node 1: 287232 pages (12.88%)
+  NUMA node 2: 287232 pages (12.88%)
+  NUMA node 3: 287232 pages (12.88%)
+  NUMA node 4: 270336 pages (12.12%)
+  NUMA node 5: 270336 pages (12.12%)
+  NUMA node 6: 270336 pages (12.12%)
+  NUMA node 7: 270336 pages (12.12%)
+Printing result:   3.237351e+00   3.933556e+03          33792            256
+[TIMING] after srun: 11:03:58.329826663
+[TIMING] after nix develop exit: 11:03:58.334529060

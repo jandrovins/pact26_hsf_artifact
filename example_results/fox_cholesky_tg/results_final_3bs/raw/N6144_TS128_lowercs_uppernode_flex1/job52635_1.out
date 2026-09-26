@@ -1,0 +1,59 @@
+=== Cholesky HSF: N=6144 TS=128 ===
+VVV_TG_ENABLED=1
+VVV_LOWER_LVL=cs
+VVV_UPPER_LVL=node
+VVV_AFF_FLEXIBLE=1
+NOSV_CONFIG_OVERRIDE=topology.binding=inherit,hwcounters.backend=none,scheduler.immediate_successor=false,taskgroups.save_hierarchy=false,instrumentation.version=none
+[TIMING] before nix develop: 11:03:17.318517822
+Environment variables set:
+  CC=clang
+  CXX=clang++
+  PAPI_HOME=/nix/store/lrhn2sdjgmbsjb22kk5rsaysr419rnly-papi-7.2.0
+  OVNI_HOME=/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0
+  NODES_HOME=/nix/store/g84v80gmx1mhshfddqxs9lbqrvcf8xcv-nodes-haffsched-debug2
+  NOSV_HOME=/nix/store/y1hg258pxa0lxg78vqvxisvffygnbnxh-nosv-haffsched-local-hwc-counters
+  TAMPI_HOME=/nix/store/dq0ha6547fs8cc26drq13fw0wxy95k5v-tampi-4.1
+  BLIS_HOME=/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1
+  LIBFLAME_HOME=/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1
+  TGLIB_HOME=/nix/store/rb92fylnlkc1jfs01an1awzc9i5zggnh-tglib-d78d0a4
+[TIMING] inside nix shell: 11:03:25.251082393
+Building cholesky_oss.bin...
+clang -D_GNU_SOURCE -O3 -g -ffast-math -march=native -mtune=native -I/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0/include -fompss-2=libnodes -DUSE_BLIS -I/nix/store/az7sb7mysl0j68mvz9wwwf1ch1w5p1sb-amd-blis-5.1/include/blis -DUSE_BLIS -I/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1/include cholesky.c -o cholesky_oss.bin -lm -lnuma -lcblas -L/nix/store/xqbv5fi9wpql9rrngifhnqs82wmljc81-amd-libflame-5.1/lib -lflame -ltglib -L/nix/store/xnpsfn4ys2wlz3l6k50ygfzj01jc1kir-ovni-1.13.0/lib -lovni
+[TIMING] after build check: 11:03:25.692857438
+VVV_CHOL_PRIORITY_ENABLED is set to 1
+Matrix size: 301989888 bytes
+Matrix dimensions: 6144 x 6144
+=== Column RR TG Mapping (potrf/trsm/syrk) ===
+  nblocks_per_dim = 48
+  Num TGs         = 12
+  Policy          = PRIO
+================================================
+=== GEMM TG Pool: DISABLED (VVV_CHOL_GEMM_TG!=1) ===
+  GEMMs use the column round-robin taskgroups (by output column).
+====================
+=== GEMM Priority Overflow Check ===
+Matrix size N = 6144, Tile size TS = 128
+Number of blocks per dimension: 48
+Maximum k term (1e4 * nblocks): 480000
+Maximum j term (1e3 * (nblocks - 1)): 47000
+Maximum i term (nblocks - 1): 47
+Maximum gemm_prio value: 527047
+INT_MAX: 2147483647
+INFO: No overflow detected. gemm_prio is safe.
+====================================
+
+NUMA page distribution for matrix a (73728 pages, page_size=4096):
+  NUMA node 0: 17920 pages (24.31%)
+  NUMA node 1: 18112 pages (24.57%)
+  NUMA node 2: 18752 pages (25.43%)
+  NUMA node 3: 18944 pages (25.69%)
+Warmup cholesky duration:   6.000000e-08 seconds
+VVV_TG_ENABLED is set to 1, running cholesky
+NUMA page distribution for matrix a (73728 pages, page_size=4096):
+  NUMA node 0: 17920 pages (24.31%)
+  NUMA node 1: 18112 pages (24.57%)
+  NUMA node 2: 18752 pages (25.43%)
+  NUMA node 3: 18944 pages (25.69%)
+Printing result:   5.137327e-02   1.490176e+03           6144            128
+[TIMING] after srun: 11:03:26.047595101
+[TIMING] after nix develop exit: 11:03:26.052860167

@@ -11,7 +11,7 @@ set -euo pipefail
 #
 # It is a FUNCTIONAL check: it proves the artifact builds and runs. Absolute
 # performance is only meaningful on the paper's AMD EPYC 9684X (Genoa-X); see
-# README / ARTIFACT_APPENDIX for the full, SLURM-based reproduction.
+# README for the full, SLURM-based reproduction.
 #
 # Configurable via environment (all optional):
 #   N        matrix size            (default: 6144)

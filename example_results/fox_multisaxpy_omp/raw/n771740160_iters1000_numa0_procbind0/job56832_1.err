@@ -1,0 +1,14 @@
+NUMA distribution for x (1507305 pages):
+  node  0:  16212 pages  (1.1%)
+  node  3:  15701 pages  (1.0%)
+  node  4: 124888 pages  (8.3%)
+  node  5:  26888 pages  (1.8%)
+  node  6: 166214 pages  (11.0%)
+  node  7: 1157402 pages  (76.8%)
+NUMA distribution for y (1507305 pages):
+  node  0: 124635 pages  (8.3%)
+  node  3:  15701 pages  (1.0%)
+  node  4: 159545 pages  (10.6%)
+  node  5:  79373 pages  (5.3%)
+  node  6: 236486 pages  (15.7%)
+  node  7: 891565 pages  (59.1%)
