@@ -165,7 +165,7 @@ int main(int argc, char **argv)
 		double duration = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_nsec - start.tv_nsec) / 1000;
 		duration /= 1000000;
 
-		double performance = n;
+		double performance = 2.0 * n; // saxpy: 1 mul + 1 add per element
 		performance *= its;
 		performance = performance / duration;
 		performance /= 1000000000;

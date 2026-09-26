@@ -114,6 +114,16 @@ def parse_matmul(line):
     return None
 
 
+def saxpy_gflops(n, its, duration_s):
+    """Multisaxpy GFLOP/s from the measured time, 2 FLOPs (mul + add) per element.
+
+    Used for every Multisaxpy variant instead of the printed value: older
+    OmpSs-2/OpenMP binaries counted 1 FLOP per element while HSF counted 2,
+    which doubled every HSF/baseline Multisaxpy ratio.
+    """
+    return 2.0 * n * its / duration_s / 1e9
+
+
 def parse_multisaxpy_hsf(line):
     """Parse: Printing result <duration> <N> <TS> <its> <gflops>"""
     m = re.search(
@@ -121,12 +131,13 @@ def parse_multisaxpy_hsf(line):
         line,
     )
     if m:
+        duration, n, its = float(m.group(1)), int(m.group(2)), int(m.group(4))
         return {
-            "duration_s": float(m.group(1)),
-            "N": int(m.group(2)),
+            "duration_s": duration,
+            "N": n,
             "TS": int(m.group(3)),
-            "iterations": int(m.group(4)),
-            "gflops": float(m.group(5)),
+            "iterations": its,
+            "gflops": saxpy_gflops(n, its, duration),
         }
     return None
 
@@ -138,12 +149,13 @@ def parse_multisaxpy_nosvorig(line):
         line,
     )
     if m:
+        duration, n, its = float(m.group(1)), int(m.group(3)), int(m.group(5))
         return {
-            "duration_s": float(m.group(1)),
-            "gflops": float(m.group(2)),
-            "N": int(m.group(3)),
+            "duration_s": duration,
+            "gflops": saxpy_gflops(n, its, duration),
+            "N": n,
             "TS": int(m.group(4)),
-            "iterations": int(m.group(5)),
+            "iterations": its,
         }
     return None
 
@@ -195,11 +207,13 @@ def baseline_matmul(text):
 def baseline_multisaxpy(text):
     """multisaxpy_smp: '<time> <gflops> <N> NaN <its> multisaxpy_smp'."""
     m = re.search(
-        r"^\s*([\d.eE+-]+)\s+([\d.eE+-]+)\s+\d+\s+NaN\s+\d+\s+multisaxpy_smp",
+        r"^\s*([\d.eE+-]+)\s+([\d.eE+-]+)\s+(\d+)\s+NaN\s+(\d+)\s+multisaxpy_smp",
         text, re.MULTILINE,
     )
     if m:
-        return {"duration_s": float(m.group(1)), "gflops": float(m.group(2))}
+        duration = float(m.group(1))
+        return {"duration_s": duration,
+                "gflops": saxpy_gflops(int(m.group(3)), int(m.group(4)), duration)}
     return None
 
 
