@@ -17,20 +17,22 @@ to trade data locality against load balance.
 
 **Headline result:** across five benchmarks (Cholesky, Heat, HPCCG, Matmul,
 Multisaxpy) at two problem scales, HSF's best configuration achieves a
-**geometric-mean speedup of 1.84×** on large problems over the best
-*OmpSs-2 + parallel-initialization* baseline, on a dual-socket AMD EPYC 9684X
-(Genoa-X).
+**geometric-mean speedup of ≈1.5×** over the best *OmpSs-2 +
+parallel-initialization* baseline (1.48× on large and 1.47× on small problems),
+on a dual-socket AMD EPYC 9684X (Genoa-X).
 
 ---
 
 ## Claims supported by this artifact
 
-1. **HSF ≈1.84× geomean speedup on large problems** vs. the best OmpSs-2 +
-   parallel-init configuration, across all five benchmarks. → regenerated as
-   `fig/benchmark_speedup_geomean.pdf` / `benchmark_speedup_geomean_init.pdf`
-   and the per-benchmark 2×5 grid `fig/benchmark_comparison.pdf`.
-2. **Consistent per-benchmark speedups at both scales** (small and large) for
-   Cholesky, Heat, HPCCG, Matmul and Multisaxpy. → `fig/benchmark_comparison.pdf`.
+1. **HSF ≈1.5× geomean speedup** vs. the best OmpSs-2 + parallel-init
+   configuration across all five benchmarks: 1.48× on large and 1.47× on small
+   problems. → regenerated as `fig/benchmark_speedup_geomean_init.pdf` (and
+   `fig/benchmark_speedup_geomean.pdf` vs. unmodified OmpSs-2), plus the
+   per-benchmark 2×5 grid `fig/benchmark_comparison.pdf`.
+2. **HSF matches or outperforms the baseline in every benchmark at both
+   scales**, from parity (Matmul 0.98–1.06×, Cholesky ≈1.04×) to 1.3–2.5×
+   (HPCCG, Multisaxpy, Heat). → `fig/benchmark_comparison.pdf`.
 3. **Comparison against three baselines** — (a) a vendor OpenMP / BLAS-LAPACK
    reference (AMD BLIS/libFLAME or LLVM OpenMP, per benchmark), (b) unmodified
    OmpSs-2, and (c) OmpSs-2 + parallel initialization. → the `orig`, `init`,
@@ -44,7 +46,7 @@ Multisaxpy) at two problem scales, HSF's best configuration achieves a
 - **Exact speedup magnitudes are hardware-specific.** They arise from the NUMA
   topology and stacked last-level cache (CCD) of the dual-socket AMD EPYC 9684X
   (Genoa-X). On other CPUs the artifact is *Functional* (it builds, runs, and
-  produces the full pipeline output) but the 1.84× magnitude is **not** expected
+  produces the full pipeline output) but the ≈1.5× magnitude is **not** expected
   to reproduce. Faithful reproduction requires the target machine; reviewers can
   be given **remote SSH access** to a Genoa-X node (see the appendix).
 - **`cholesky` external baseline at `n=49152`** is omitted: its matrix exceeds
@@ -178,9 +180,10 @@ python plot_reproduced.py               # LaTeX-rendered figures
 - `benchmark_comparison_external_baseline` — normalized to the external baseline.
 - `benchmark_speedup_geomean` — geometric-mean speedup per benchmark.
 - `benchmark_speedup_geomean_init` — geomean vs. OmpSs-2 + parallel init
-  (the ≈1.84× large-problem claim).
+  (≈1.48× large / 1.47× small).
 
-Compare the regenerated figures to the committed `fig/*` (the paper's figures).
+Compare them with the paper's Figures 1 and 5: expect per-benchmark values
+within ≈10% of the paper, except Multisaxpy.
 
 ---
 
